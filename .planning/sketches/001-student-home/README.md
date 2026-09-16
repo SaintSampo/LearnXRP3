@@ -19,6 +19,7 @@ open .planning/sketches/001-student-home/index.html
 - **B: Clean maker tool** — left rail, search, compact app cards with metadata chips, recent work table, robot panel on the right. Arduino Cloud posture, works to college age.
 - **C: Classroom-first** — class banner, "Today" assignment queue with step counts and due dates, teacher announcements, apps demoted to a "free explore" row.
 - **D: Experiential site** — built from experiential.bot: blue navbar (#22527B) with the white wordmark, red primary buttons (#D1182C), Montserrat, white/grey/dark section bands, the site's isometric hero illustration. Reads as "the website turned into an app".
+- **E: Experiential, playful** — same brand, played up: pill nav and buttons, the red-and-blue X diagonal as a motif in the navbar and footer, a gradient hero card with a progress ring, app cards with a colored "puzzle knob" and tilted icon tiles, the logo's bright blue (#0A6EFF) as a second accent. Still soft shadows and Montserrat, no cartoon borders.
 
 ## What to Look For
 - Which one makes a nine-year-old start in under two minutes, and which one a sixteen-year-old is not embarrassed by.

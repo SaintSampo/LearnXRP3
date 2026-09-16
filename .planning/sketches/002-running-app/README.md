@@ -21,6 +21,7 @@ open .planning/sketches/002-running-app/index.html
 - **B: Clean panel + status bar** — collapsible lesson panel with the full step list, breadcrumb header, and a mono status bar across the bottom that shows every bridge field.
 - **C: Classroom assignment** — assignment header with due date, progress bar and a Turn in button; lesson panel on the right with a teacher note; bridge as a small footer inside the panel.
 - **D: Experiential site** — site-brand chrome: blue navbar with breadcrumb, a grey "Connected app" strip carrying the bridge fields as badges, lesson panel left in Montserrat with red actions, dark footer bar like the site footer.
+- **E: Experiential, playful** — coach column of rounded tiles on a soft blue-grey ground: a ring-and-eyebrow header tile, the current step on a white-to-blue gradient tile, pill step list, bridge in a navy tile at the bottom; the frame gets rounded corners and a soft shadow.
 
 ## What to Look For
 - Play the loop in each: Connect (robot lock goes to `wpi.xrpweb`) → Run (shell prints reflectance values) → the step's auto-check turns green → Next step (new context sent to the app).

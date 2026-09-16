@@ -8,8 +8,10 @@ Scratch, Code.org (class codes, picture passwords, kid-safe), Arduino Cloud and 
 
 A fourth variant, **Experiential site**, was added to every sketch on Jacob's request: it uses the live experiential.bot brand as-is (Odoo theme values: red #D1182C, blue #22527B, dark #343A40, grey #E9ECEF, Montserrat 300/400/600 with 500-weight headings, the white wordmark logo, the isometric hero illustration) so the team can judge "our website turned into an app" against the three invented vibes.
 
+A fifth variant, **Experiential, playful**, extends the site brand with playful but professional elements: rounder shapes, pill buttons, the X-mark diagonal as a recurring motif, progress rings, puzzle-knob app cards, and the logo's bright blue as a second accent.
+
 ## Themes
-`themes/default.css` carries all four palettes scoped as `.theme-playful`, `.theme-clean`, `.theme-classroom`, `.theme-experiential`. The sketch toolbar can force one theme onto every variant.
+`themes/default.css` carries all five palettes scoped as `.theme-playful`, `.theme-clean`, `.theme-classroom`, `.theme-experiential`, `.theme-experiential-play`. The sketch toolbar can force one theme onto every variant.
 
 ## Sketches
 
