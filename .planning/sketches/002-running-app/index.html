@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sketch 002 · Running App</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&family=Manrope:wght@500;600;700;800&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#E9EBEE}
+#variant-nav{position:fixed;top:0;left:0;right:0;z-index:9998;background:#1C2230;color:#fff;padding:8px 16px;display:flex;gap:8px;align-items:center;font-family:system-ui,sans-serif;font-size:13px}
+#variant-nav .label{opacity:.6;margin-inline-end:8px}
+.variant-tab{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;transition:all .15s ease}
+.variant-tab:hover{background:rgba(255,255,255,.1)}
+.variant-tab.active{background:#fff;color:#1C2230;border-color:#fff}
+#stage{margin:48px auto 0;max-width:1280px;transition:max-width .2s ease;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.variant{display:none;height:calc(100vh - 48px);min-height:640px;background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);font-size:var(--text-base);line-height:1.45;overflow:hidden}
+.variant.active{display:block}
+#sketch-tools{position:fixed;bottom:12px;right:12px;z-index:9999;font-family:system-ui;font-size:12px;background:rgba(0,0,0,.75);color:#fff;padding:8px 12px;border-radius:8px;opacity:.4;transition:opacity .2s;display:flex;gap:8px;align-items:center}
+#sketch-tools:hover{opacity:1}
+#sketch-tools select,#sketch-tools button{font:inherit;font-size:12px;background:#333;color:#fff;border:1px solid #555;border-radius:4px;padding:3px 6px;cursor:pointer}
+#sketch-tools button.on{background:#fff;color:#000}
+#annot{position:fixed;z-index:10000;pointer-events:none;background:#111;color:#fff;font:11px/1.4 ui-monospace,monospace;padding:6px 8px;border-radius:4px;display:none;white-space:pre}
+.toast{position:fixed;left:50%;bottom:64px;transform:translateX(-50%) translateY(20px);background:#1C2230;color:#fff;padding:10px 16px;border-radius:8px;font:14px system-ui;opacity:0;transition:all .2s ease;z-index:9997;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.btn{font-family:var(--font-sans);font-weight:700;font-size:var(--text-sm);border:var(--border-w) solid var(--color-border);background:var(--color-surface);color:var(--color-text);border-radius:var(--radius-sm);padding:8px 14px;cursor:pointer;transition:all .15s ease;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-primary{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}
+.theme-playful .btn-primary{border-color:var(--color-border)}
+.btn-ghost{border-color:transparent;background:transparent}
+.card{background:var(--color-surface);border:var(--border-w) solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-sm)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:var(--text-xs);font-weight:700;padding:3px 10px;border-radius:var(--radius-full);background:var(--color-surface-2);color:var(--color-text-muted);white-space:nowrap}
+.chip.ok{background:#DCF5E6;color:var(--color-success)}
+.chip.warn{background:#FFF1D6;color:#8A5A00}
+.chip i{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
+.mono{font-family:var(--font-mono)}
+.muted{color:var(--color-text-muted)}
+h1,h2,h3{font-family:var(--font-display);margin:0;line-height:1.1}
+.prog{height:8px;border-radius:var(--radius-full);background:var(--color-surface-2);overflow:hidden;border:1px solid var(--color-border)}
+.prog > i{display:block;height:100%;background:var(--color-primary);transition:width .4s ease}
+.hint{background:var(--color-primary-soft);border-radius:var(--radius-sm);padding:10px 12px;font-size:var(--text-sm);display:none;margin-top:10px}
+.hint.open{display:block}
+.steplist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.steplist li{display:flex;gap:10px;align-items:center;font-size:var(--text-sm);padding:6px 8px;border-radius:var(--radius-sm);color:var(--color-text-muted)}
+.steplist li i{width:22px;height:22px;border-radius:50%;border:2px solid var(--color-border);display:grid;place-items:center;font-size:11px;font-weight:800;flex:none;background:var(--color-surface)}
+.steplist li.done{color:var(--color-text)}
+.steplist li.done i{background:var(--color-success);border-color:var(--color-success);color:#fff}
+.steplist li.now{background:var(--color-surface-2);color:var(--color-text);font-weight:700}
+.steplist li.now i{border-color:var(--color-primary);color:var(--color-primary)}
+
+/* frame + bridge */
+.frame{background:#fff;border:var(--border-w) solid var(--color-border);border-radius:var(--radius-md);overflow:hidden;display:flex;flex-direction:column;min-height:0;position:relative}
+.frame-tag{position:absolute;bottom:8px;right:8px;z-index:5;font:11px var(--font-mono);background:rgba(28,34,48,.85);color:#fff;padding:3px 8px;border-radius:4px;pointer-events:none}
+.ide-host{flex:1;display:flex;min-height:0}
+.bridge{display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-family:var(--font-mono);font-size:12px}
+.bridge b{font-weight:500;color:var(--color-text-muted)}
+.bridge span{white-space:nowrap}
+.bridge .dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--color-text-muted);margin-inline-end:6px;vertical-align:middle}
+.bridge .dot.ok{background:var(--color-success)}
+.bridge .dot.warn{background:var(--color-accent)}
+
+/* ===== mock XRPWeb (inside the iframe, NOT themed) ===== */
+.ide{flex:1;display:grid;grid-template-rows:44px minmax(0,1fr) 120px;grid-template-columns:180px 1fr;font-family:'Manrope',system-ui,sans-serif;font-size:13px;color:#1f2937;min-height:0}
+.ide .nav{grid-column:1/-1;background:#1f2937;color:#fff;display:flex;align-items:center;gap:8px;padding:0 12px}
+.ide .nav .brand{font-weight:800;margin-inline-end:10px;display:flex;align-items:center;gap:6px}
+.ide .nav .brand i{width:16px;height:16px;border-radius:4px;background:#e11d48;display:inline-block}
+.ide .nav button{font:inherit;font-size:12px;font-weight:600;background:#374151;color:#fff;border:0;border-radius:6px;padding:6px 10px;cursor:pointer;transition:all .15s ease}
+.ide .nav button:hover{background:#4b5563}
+.ide .nav button.run{background:#16a34a}.ide .nav button.stop{background:#dc2626}
+.ide .nav .sp{flex:1}
+.ide .nav .seg{display:flex;background:#111827;border-radius:6px;padding:2px}
+.ide .nav .seg button{background:transparent;padding:4px 10px}.ide .nav .seg button.on{background:#e11d48}
+.ide .nav .conn{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9ca3af}
+.ide .toolbox{background:#f3f4f6;border-inline-end:1px solid #e5e7eb;padding:8px 0;overflow:auto}
+.ide .toolbox div{padding:7px 12px;display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;font-size:12px}
+.ide .toolbox div:hover{background:#e5e7eb}
+.ide .toolbox div i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.ide .ws{background:#fff;background-image:radial-gradient(#e5e7eb 1px,transparent 1px);background-size:20px 20px;padding:24px;overflow:auto;position:relative}
+.ide .shell{grid-column:1/-1;background:#0b1220;color:#d1d5db;font-family:'IBM Plex Mono',monospace;font-size:12px;padding:8px 12px;overflow:auto;border-top:1px solid #1f2937}
+.ide .shell .h{color:#6b7280;font-size:11px;margin-bottom:4px}
+.blk{border-radius:6px;color:#fff;font-weight:700;font-size:12px;padding:6px 10px;display:inline-block;box-shadow:0 1px 0 rgba(0,0,0,.25);white-space:nowrap}
+.blk .f{background:rgba(255,255,255,.9);color:#1f2937;border-radius:10px;padding:1px 8px;margin:0 2px;font-weight:600}
+.blk .d{background:rgba(0,0,0,.2);border-radius:4px;padding:1px 6px;margin:0 2px}
+.c{position:relative;padding:6px 8px 8px 8px;border-radius:6px;color:#fff;font-weight:700;font-size:12px;display:inline-block;box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.c .inner{background:#fff;border-radius:4px;margin:6px 0 0 14px;padding:6px;display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.c .tail{margin-top:4px}
+.stack{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+.hat{border-radius:16px 16px 6px 6px}
+.py{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.6;white-space:pre;color:#1f2937}
+.py .k{color:#7c3aed}.py .s{color:#0f766e}.py .c2{color:#6b7280}
+.ws-sel{position:absolute;inset:0;background:rgba(255,255,255,.7);display:none;align-items:center;justify-content:center;font-weight:700}
+
+/* ===== Variant A: Playful (coach column left) ===== */
+.pa{display:grid;grid-template-columns:340px 1fr;height:100%;gap:var(--space-4);padding:var(--space-4)}
+.pa .coach{display:flex;flex-direction:column;gap:var(--space-3);min-height:0}
+.pa .coach .top{display:flex;align-items:center;justify-content:space-between}
+.pa .coach .top .logo{font-family:var(--font-display);font-weight:700;font-size:var(--text-xl);display:flex;align-items:center;gap:8px}
+.pa .coach .top .logo i{width:26px;height:26px;border-radius:8px;background:var(--color-primary);border:var(--border-w) solid var(--color-border);display:inline-block}
+.pa .bubble{padding:var(--space-4);box-shadow:var(--shadow-md);position:relative}
+.pa .bubble.now{background:var(--color-accent)}
+.pa .bubble h2{font-size:var(--text-xl);font-weight:600;margin-bottom:4px}
+.pa .bubble .num{font-family:var(--font-display);font-size:var(--text-3xl);font-weight:700;line-height:1;color:var(--color-primary);float:inline-end;margin-inline-start:8px}
+.pa .check{display:flex;gap:8px;align-items:center;margin-top:10px;font-weight:800;font-size:var(--text-sm)}
+.pa .check i{width:24px;height:24px;border-radius:50%;border:var(--border-w) solid var(--color-border);background:var(--color-surface);display:grid;place-items:center;font-size:12px}
+.pa .check.done i{background:var(--color-success);color:#fff}
+.pa .bridgecard{padding:var(--space-3) var(--space-4);margin-top:auto;font-size:12px;background:var(--color-surface-2)}
+.pa .frame{box-shadow:var(--shadow-md)}
+
+/* ===== Variant B: Clean (collapsible left panel, status bar bottom) ===== */
+.cb{display:grid;grid-template-rows:48px 1fr 36px;height:100%}
+.cb .top{display:flex;align-items:center;gap:12px;padding:0 var(--space-4);background:var(--color-surface);border-bottom:1px solid var(--color-border)}
+.cb .top .logo{font-weight:800;font-family:var(--font-display);display:flex;align-items:center;gap:8px}
+.cb .top .logo i{width:20px;height:20px;border-radius:5px;background:var(--color-primary);display:inline-block}
+.cb .top .crumb{color:var(--color-text-muted);font-size:var(--text-sm)}
+.cb .top .crumb b{color:var(--color-text)}
+.cb .top .sp{flex:1}
+.cb .mid{display:grid;grid-template-columns:320px 1fr;min-height:0;transition:grid-template-columns .2s ease}
+.cb .mid.collapsed{grid-template-columns:44px 1fr}
+.cb .panel{border-inline-end:1px solid var(--color-border);background:var(--color-surface);padding:var(--space-4);overflow:auto;display:flex;flex-direction:column;gap:var(--space-4)}
+.cb .mid.collapsed .panel > *:not(.ph){display:none}
+.cb .panel .ph{display:flex;justify-content:space-between;align-items:center}
+.cb .panel h2{font-size:var(--text-lg);font-weight:800}
+.cb .panel .step{font-size:var(--text-sm)}
+.cb .panel .step h3{font-size:var(--text-base);font-weight:800;margin-bottom:6px}
+.cb .panel .rule{border:1px dashed var(--color-border);border-radius:var(--radius-sm);padding:8px 10px;font-size:12px;display:flex;gap:8px;align-items:center}
+.cb .panel .rule.done{border-style:solid;border-color:var(--color-success);background:#EAF7EF}
+.cb .framewrap{padding:var(--space-3);min-height:0;display:flex}
+.cb .framewrap .frame{flex:1;border-radius:var(--radius-sm)}
+.cb .status{background:var(--color-surface);border-top:1px solid var(--color-border);padding:0 var(--space-4);display:flex;align-items:center}
+
+/* ===== Variant C: Classroom (assignment header, lesson right) ===== */
+.cc{display:grid;grid-template-rows:auto 1fr;height:100%}
+.cc .head{background:var(--color-surface);border-bottom:1px solid var(--color-border);padding:var(--space-3) var(--space-6);display:grid;grid-template-columns:auto 1fr auto;gap:var(--space-6);align-items:center}
+.cc .head .brand{font-family:var(--font-display);font-weight:700;display:flex;align-items:center;gap:8px}
+.cc .head .brand i{width:20px;height:20px;border-radius:5px;background:var(--color-primary);display:inline-block}
+.cc .head .asg h1{font-size:var(--text-lg);font-weight:700}
+.cc .head .asg .meta{font-size:var(--text-xs);color:var(--color-text-muted);display:flex;gap:12px;align-items:center;margin-top:2px}
+.cc .head .asg .prog{width:160px;display:inline-block;vertical-align:middle}
+.cc .head .actions{display:flex;gap:8px;align-items:center}
+.cc .body{display:grid;grid-template-columns:1fr 300px;min-height:0}
+.cc .framewrap{padding:var(--space-3);display:flex;min-height:0}
+.cc .framewrap .frame{flex:1;border-radius:var(--radius-sm)}
+.cc .lesson{border-inline-start:1px solid var(--color-border);background:var(--color-surface);padding:var(--space-4);overflow:auto;display:flex;flex-direction:column;gap:var(--space-3);font-size:var(--text-sm)}
+.cc .lesson h2{font-size:var(--text-base);font-weight:700}
+.cc .lesson .rule{border-inline-start:3px solid var(--color-border);padding:4px 10px;font-size:12px;color:var(--color-text-muted)}
+.cc .lesson .rule.done{border-color:var(--color-success);color:var(--color-success)}
+.cc .lesson .teacher{background:var(--color-primary-soft);border-radius:var(--radius-sm);padding:8px 10px;font-size:12px}
+.cc .bridgebar{background:var(--color-surface-2);border-top:1px solid var(--color-border);padding:6px var(--space-4);margin:auto calc(-1 * var(--space-4)) calc(-1 * var(--space-4));font-size:11px}
+
+@media (max-width:900px){.pa{grid-template-columns:1fr}.cb .mid{grid-template-columns:1fr}.cc .body{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="variant-nav">
+  <span class="label">Sketch 002 · Running app (lesson + XRPWeb in frame)</span>
+  <button class="variant-tab active" onclick="showVariant('a',event)">A: Playful coach</button>
+  <button class="variant-tab" onclick="showVariant('b',event)">B: Clean panel + status bar</button>
+  <button class="variant-tab" onclick="showVariant('c',event)">C: Classroom assignment</button>
+</div>
+
+<div id="stage">
+
+<!-- ============ A ============ -->
+<div id="variant-a" class="variant theme-playful active" data-v="a">
+<div class="pa">
+  <aside class="coach">
+    <div class="top"><div class="logo"><i></i>LearnXRP</div><button class="btn btn-ghost" onclick="toast('Back to home (sketch 001)')">← Home</button></div>
+    <div class="card bubble" style="padding:10px 14px"><div style="font-weight:800">Line follower</div><div class="muted" style="font-size:var(--text-sm)">Unit 2 · with Blocks Lab</div><div class="prog" style="margin-top:8px"><i data-prog style="width:43%"></i></div></div>
+    <div class="card bubble now">
+      <span class="num" data-stepnum>3</span>
+      <h2 data-title>Read the reflectance sensor</h2>
+      <div data-body style="font-size:var(--text-sm);font-weight:600">Drag <b>reflectance left</b> from Sensors into a <b>print</b> block. Run it and watch the number in the shell. Move the robot over the black tape. What changes?</div>
+      <div class="check" data-rule><i>○</i><span>Run a program that reads the left reflectance sensor</span></div>
+      <div class="hint" data-hint>Values near 0 mean white, near 1 mean black. Try holding the robot 1 cm above the tape.</div>
+      <div style="display:flex;gap:8px;margin-top:12px"><button class="btn" onclick="toggleHint(this)">Hint</button><button class="btn btn-primary" data-next disabled onclick="nextStep(this)">Next step →</button></div>
+    </div>
+    <div class="card bubble" style="padding:10px 14px;font-size:var(--text-sm)"><b>No robot?</b> <button class="btn btn-ghost" style="padding:2px 8px" onclick="switchApp(this,'educabot.sim','Simulator')">Use the simulator</button></div>
+    <div class="card bridgecard">
+      <div class="bridge">
+        <span><i class="dot ok" data-b-dot></i><b>app</b> <span data-b-app>wpi.xrpweb</span></span>
+        <span><b>robot</b> <span data-b-robot>free</span></span>
+        <span><b>saved</b> <span data-b-save>—</span></span>
+        <span><b>progress</b> <span data-b-prog>step 3 pending</span></span>
+      </div>
+    </div>
+  </aside>
+  <div class="frame"><span class="frame-tag" data-frametag>iframe · xrpcode.wpi.edu · allow=bluetooth serial</span><div class="ide-host"></div></div>
+</div>
+</div>
+
+<!-- ============ B ============ -->
+<div id="variant-b" class="variant theme-clean" data-v="b">
+<div class="cb">
+  <div class="top">
+    <div class="logo"><i></i>LearnXRP</div>
+    <span class="crumb">Period 3 Robotics / Unit 2 / <b>Line follower</b></span>
+    <span class="sp"></span>
+    <span class="chip ok" data-b-robotchip><i></i>XRP-3F2A</span>
+    <span class="chip">Otter-42</span>
+    <button class="btn btn-ghost" onclick="toast('Back to home (sketch 001)')">Home</button>
+  </div>
+  <div class="mid" id="mid-b">
+    <aside class="panel">
+      <div class="ph"><h2 style="font-size:var(--text-sm);text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-muted)">Lesson</h2><button class="btn btn-ghost" style="padding:4px 8px" onclick="document.getElementById('mid-b').classList.toggle('collapsed')">⇔</button></div>
+      <ul class="steplist" data-steps>
+        <li class="done"><i>✓</i>Meet the sensor</li>
+        <li class="done"><i>✓</i>Where does it go?</li>
+        <li class="now"><i>3</i>Read the reflectance sensor</li>
+        <li><i>4</i>Decide: tape or floor?</li>
+        <li><i>5</i>Turn toward the line</li>
+        <li><i>6</i>Follow the line</li>
+        <li><i>7</i>Tune and race</li>
+      </ul>
+      <div class="step">
+        <h3 data-title>Step 3 · Read the reflectance sensor</h3>
+        <div data-body>Drag <b>reflectance left</b> from Sensors into a <b>print</b> block. Run it and watch the shell. Move the robot over black tape: what changes?</div>
+        <div class="rule" data-rule style="margin-top:10px"><span>○</span><span>Checks itself: a run that reads the left reflectance sensor</span></div>
+        <div class="hint" data-hint>Near 0 is white, near 1 is black. Hold the robot about 1 cm above the tape.</div>
+        <div style="display:flex;gap:8px;margin-top:12px"><button class="btn" onclick="toggleHint(this)">Hint</button><button class="btn btn-primary" data-next disabled onclick="nextStep(this)">Next</button></div>
+      </div>
+      <div style="margin-top:auto;font-size:12px" class="muted">No robot today? <button class="btn btn-ghost" style="padding:2px 6px;font-size:12px" onclick="switchApp(this,'educabot.sim','Simulator')">Switch to Simulator</button></div>
+    </aside>
+    <div class="framewrap"><div class="frame"><span class="frame-tag" data-frametag>iframe · xrpcode.wpi.edu · allow=bluetooth serial</span><div class="ide-host"></div></div></div>
+  </div>
+  <div class="status">
+    <div class="bridge">
+      <span><i class="dot ok" data-b-dot></i><b>bridge</b> v1 · <span data-b-app>wpi.xrpweb</span></span>
+      <span><b>robot lock</b> <span data-b-robot>free</span></span>
+      <span><b>storage</b> <span data-b-save>—</span></span>
+      <span><b>progress</b> <span data-b-prog>step 3 pending</span></span>
+      <span><b>context</b> tag=Otter-42 locale=en board=nanoxrp</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============ C ============ -->
+<div id="variant-c" class="variant theme-classroom" data-v="c">
+<div class="cc">
+  <div class="head">
+    <div class="brand"><i></i>LearnXRP</div>
+    <div class="asg">
+      <h1>Line follower · Period 3 Robotics</h1>
+      <div class="meta"><span>Due Friday</span><span>·</span><span data-stepmeta>Step 3 of 7</span><span class="prog"><i data-prog style="width:43%"></i></span><span class="chip ok" data-b-robotchip><i></i>XRP-3F2A</span><span class="chip">Otter-42</span></div>
+    </div>
+    <div class="actions"><button class="btn" onclick="toast('Back to Today (sketch 001)')">Today</button><button class="btn btn-primary" data-turnin disabled onclick="toast('Turned in. Ms. Rivera sees step 7 complete.')">Turn in</button></div>
+  </div>
+  <div class="body">
+    <div class="framewrap"><div class="frame"><span class="frame-tag" data-frametag>iframe · xrpcode.wpi.edu · allow=bluetooth serial</span><div class="ide-host"></div></div></div>
+    <aside class="lesson">
+      <h2 data-title>Step 3 · Read the reflectance sensor</h2>
+      <div data-body>Drag <b>reflectance left</b> from Sensors into a <b>print</b> block. Run it and watch the shell. Move the robot over black tape: what changes?</div>
+      <div class="rule" data-rule>○ Auto-check: a run that reads the left reflectance sensor</div>
+      <div class="teacher"><b>Ms. Rivera:</b> write the two numbers you see (tape and floor) in your notebook. We compare them tomorrow.</div>
+      <div class="hint" data-hint>Near 0 is white, near 1 is black. Hold the robot about 1 cm above the tape.</div>
+      <div style="display:flex;gap:8px"><button class="btn" onclick="toggleHint(this)">Hint</button><button class="btn btn-primary" data-next disabled onclick="nextStep(this)">Next step</button></div>
+      <ul class="steplist" data-steps style="margin-top:8px">
+        <li class="done"><i>✓</i>Meet the sensor</li>
+        <li class="done"><i>✓</i>Where does it go?</li>
+        <li class="now"><i>3</i>Read the reflectance sensor</li>
+        <li><i>4</i>Decide: tape or floor?</li>
+        <li><i>5</i>Turn toward the line</li>
+        <li><i>6</i>Follow the line</li>
+        <li><i>7</i>Tune and race</li>
+      </ul>
+      <div class="muted" style="font-size:12px">No robot? <button class="btn btn-ghost" style="padding:2px 6px;font-size:12px" onclick="switchApp(this,'educabot.sim','Simulator')">Use the simulator</button></div>
+      <div class="bridgebar"><div class="bridge" style="font-size:11px"><span><i class="dot ok" data-b-dot></i><span data-b-app>wpi.xrpweb</span></span><span><b>robot</b> <span data-b-robot>free</span></span><span><b>saved</b> <span data-b-save>—</span></span><span><b>progress</b> <span data-b-prog>pending</span></span></div></div>
+    </aside>
+  </div>
+</div>
+</div>
+
+</div><!-- /stage -->
+
+<div id="sketch-tools">
+  <label>theme <select id="theme-switcher" onchange="forceTheme(this.value)"><option value="auto">per variant</option><option value="playful">playful</option><option value="clean">clean</option><option value="classroom">classroom</option></select></label>
+  <span>·</span>
+  <button onclick="vp(768,this)">tablet</button><button class="on" onclick="vp(1280,this)">desktop</button>
+  <span>·</span>
+  <button id="annot-btn" onclick="toggleAnnot(this)">annotate</button>
+</div>
+<div id="annot"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---- sketch chrome ---- */
+function showVariant(id,ev){document.querySelectorAll('.variant').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.variant-tab').forEach(t=>t.classList.remove('active'));document.getElementById('variant-'+id).classList.add('active');ev.target.classList.add('active')}
+function forceTheme(t){document.querySelectorAll('.variant').forEach(v=>{v.classList.remove('theme-playful','theme-clean','theme-classroom');v.classList.add('theme-'+(t==='auto'?v.dataset.own:t))})}
+document.querySelectorAll('.variant').forEach(v=>{v.dataset.own=[...v.classList].find(c=>c.startsWith('theme-')).slice(6)})
+function vp(w,btn){document.getElementById('stage').style.maxWidth=w+'px';document.querySelectorAll('#sketch-tools button').forEach(b=>{if(b.id!=='annot-btn')b.classList.remove('on')});btn.classList.add('on')}
+let annotOn=false;const annot=document.getElementById('annot');
+function toggleAnnot(b){annotOn=!annotOn;b.classList.toggle('on',annotOn);annot.style.display='none'}
+document.addEventListener('mousemove',e=>{if(!annotOn)return;const el=e.target.closest('#stage *');if(!el){annot.style.display='none';return}const cs=getComputedStyle(el);annot.textContent=el.tagName.toLowerCase()+(typeof el.className==='string'&&el.className?'.'+el.className.split(' ')[0]:'')+'\nfont '+cs.fontSize+' '+cs.fontWeight+' '+cs.fontFamily.split(',')[0]+'\ncolor '+cs.color+'\nbg '+cs.backgroundColor+'\npad '+cs.padding;annot.style.display='block';annot.style.left=(e.clientX+14)+'px';annot.style.top=(e.clientY+14)+'px'})
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2000)}
+
+/* ---- mock XRPWeb, injected into every variant's frame ---- */
+const IDE=`
+<div class="ide">
+  <div class="nav">
+    <span class="brand"><i></i>XRPCode</span>
+    <button data-ide-connect onclick="ideConnect(this)">Connect</button>
+    <button class="run" onclick="ideRun(this)">▶ Run</button>
+    <button class="stop" onclick="ideStop(this)">■ Stop</button>
+    <button onclick="ideSave(this)">Save</button>
+    <span class="sp"></span>
+    <span class="conn" data-ide-conn>no device</span>
+    <div class="seg"><button class="on" onclick="ideMode(this,'blocks')">Blocks</button><button onclick="ideMode(this,'python')">Python</button></div>
+  </div>
+  <div class="toolbox">
+    <div><i style="background:#5b80a5"></i>Logic</div><div><i style="background:#5ba55b"></i>Loops</div><div><i style="background:#5b67a5"></i>Math</div><div><i style="background:#a55b80"></i>Variables</div>
+    <div style="background:#e5e7eb"><i style="background:#0ea5e9"></i>Drivetrain</div><div><i style="background:#f59e0b"></i>Sensors</div><div><i style="background:#8b5cf6"></i>Gamepad</div><div><i style="background:#6b7280"></i>3rd Party</div>
+  </div>
+  <div class="ws">
+    <div data-ide-blocks class="stack">
+      <span class="blk hat" style="background:#e11d48">when ▶ Run clicked</span>
+      <span class="blk" style="background:#a55b80">set <span class="d">left</span> to <span class="f">reflectance left</span></span>
+      <span class="blk" style="background:#6b7280">print <span class="d">left</span></span>
+      <div class="c" style="background:#5ba55b">forever
+        <div class="inner">
+          <div class="c" style="background:#5b80a5">if <span class="f">left</span> &gt; <span class="f">0.5</span>
+            <div class="inner"><span class="blk" style="background:#0ea5e9">drive straight <span class="f">10</span> cm</span></div>
+            <div class="tail">else</div>
+            <div class="inner"><span class="blk" style="background:#0ea5e9">turn <span class="f">15</span> °</span></div>
+          </div>
+          <span class="blk" style="background:#a55b80">set <span class="d">left</span> to <span class="f">reflectance left</span></span>
+        </div>
+      </div>
+    </div>
+    <div data-ide-py class="py" style="display:none"><span class="k">from</span> XRPLib.defaults <span class="k">import</span> *
+
+left = reflectance.get_left()
+<span class="k">print</span>(left)
+<span class="k">while</span> <span class="k">True</span>:
+    <span class="k">if</span> left &gt; <span class="s">0.5</span>:
+        drivetrain.straight(<span class="s">10</span>)
+    <span class="k">else</span>:
+        drivetrain.turn(<span class="s">15</span>)
+    left = reflectance.get_left()</div>
+  </div>
+  <div class="shell"><div class="h">shell · MicroPython v1.24 on XRP</div><div data-ide-out>&gt;&gt;&gt; </div></div>
+</div>`;
+document.querySelectorAll('.ide-host').forEach(h=>h.innerHTML=IDE);
+
+/* ---- per-variant state helpers ---- */
+const V=el=>el.closest('.variant');
+const q=(root,sel)=>root.querySelector(sel);
+function setBridge(root,k,v){root.querySelectorAll('[data-b-'+k+']').forEach(e=>e.textContent=v)}
+function ideConnect(b){const r=V(b);const conn=q(r,'[data-ide-conn]');if(b.dataset.on){b.dataset.on='';b.textContent='Connect';conn.textContent='no device';setBridge(r,'robot','free');toast('bridge: robot.release()');return}conn.textContent='searching…';setBridge(r,'robot','acquire → pending');setTimeout(()=>{b.dataset.on='1';b.textContent='Disconnect';conn.textContent='XRP-3F2A · BLE · 87%';setBridge(r,'robot','XRP-3F2A → wpi.xrpweb');toast('bridge: robot.acquire() granted to wpi.xrpweb')},900)}
+function ideRun(b){const r=V(b);const out=q(r,'[data-ide-out]');if(!q(r,'[data-ide-connect]').dataset.on){out.innerHTML+='<br>! connect a robot first';toast('XRPWeb: no device');return}out.innerHTML='&gt;&gt;&gt; run main.py';let n=0;const vals=[0.08,0.11,0.09,0.71,0.84,0.79];const t=setInterval(()=>{out.innerHTML+='<br>'+vals[n].toFixed(2);out.parentElement.scrollTop=1e4;n++;if(n===3){markDone(r)}if(n>=vals.length){clearInterval(t);out.innerHTML+='<br>&gt;&gt;&gt; '}},350);r._run=t;setBridge(r,'save','saving…');setTimeout(()=>setBridge(r,'save','saved 1s ago'),700)}
+function ideStop(b){const r=V(b);clearInterval(r._run);q(r,'[data-ide-out]').innerHTML+='<br>KeyboardInterrupt<br>&gt;&gt;&gt; ';toast('XRPWeb: stopped (watchdog zeroed motors)')}
+function ideSave(b){const r=V(b);setBridge(r,'save','saving…');setTimeout(()=>{setBridge(r,'save','saved now · Otter-42/line_follow_v2');toast('bridge: storage.save("line_follow_v2")')},500)}
+function ideMode(b,m){const r=V(b);b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');q(r,'[data-ide-blocks]').style.display=m==='blocks'?'':'none';q(r,'[data-ide-py]').style.display=m==='python'?'':'none'}
+function markDone(r){const rule=q(r,'[data-rule]');if(!rule||rule.classList.contains('done'))return;rule.classList.add('done');const i=rule.querySelector('i,span');if(i)i.textContent='✓';if(!rule.querySelector('i')&&!rule.querySelector('span'))rule.textContent='✓ '+rule.textContent.replace(/^○\s*/,'');const nx=q(r,'[data-next]');if(nx)nx.disabled=false;setBridge(r,'prog','step 3 done · evidence: read reflectance_left');toast('bridge: progress {step 3, done}. Step 3 complete!')}
+function toggleHint(b){const h=q(V(b),'[data-hint]');h.classList.toggle('open');b.textContent=h.classList.contains('open')?'Hide hint':'Hint'}
+function nextStep(b){const r=V(b);q(r,'[data-title]').textContent=(r.dataset.v==='a'?'':'Step 4 · ')+'Decide: tape or floor?';q(r,'[data-body]').innerHTML='Pick a number between your two readings. Use an <b>if</b> block: if <b>left</b> is bigger than it, the robot is on tape.';const rule=q(r,'[data-rule]');rule.classList.remove('done');const i=rule.querySelector('i,span');if(i)i.textContent='○';const txt=rule.querySelector('span:last-child');if(txt)txt.textContent='Run a program with an if block that compares reflectance left';const sn=q(r,'[data-stepnum]');if(sn)sn.textContent='4';r.querySelectorAll('[data-prog]').forEach(p=>p.style.width='57%');const sm=q(r,'[data-stepmeta]');if(sm)sm.textContent='Step 4 of 7';const st=q(r,'[data-steps]');if(st){const li=st.children;li[2].className='done';li[2].querySelector('i').textContent='✓';li[3].className='now'}b.disabled=true;setBridge(r,'prog','step 4 pending');toast('bridge: context {activity: unit-2/step-4} sent to app')}
+function switchApp(b,id,name){const r=V(b);setBridge(r,'app',id);setBridge(r,'robot','released (sim needs none)');r.querySelectorAll('[data-frametag]').forEach(t=>t.textContent='iframe · sim.educabot.com · no device permissions');r.querySelectorAll('.ide').forEach(i=>{i.innerHTML='<div style="grid-column:1/-1;grid-row:1/-1;display:grid;place-items:center;background:#0f172a;color:#cbd5e1;font-family:Manrope,sans-serif"><div style="text-align:center"><div style="font-size:22px;font-weight:800">Educabot Simulator</div><div style="opacity:.7;margin-top:6px">would render here · same lesson context · same progress events</div></div></div>'});r.querySelectorAll('[data-b-robotchip]').forEach(c=>{c.className='chip';c.innerHTML='<i></i>simulator'});toast('bridge: robot.release() from wpi.xrpweb · context sent to educabot.sim')}
+</script>
+</body>
+</html>
