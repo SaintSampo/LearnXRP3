@@ -26,3 +26,4 @@ Jacob then asked to remove printed login cards entirely and proposed that a stud
 | 003 | teacher-class | How does a teacher run a class of pseudonymous tags and keep names off the server? | — | layout, teacher, roster, privacy, class-code, progress |
 | 004 | ribbon | What is the one bar every app inherits, and how does it behave inside a third-party app with its own navbar? | — | component, ribbon, shell, brand, i18n, robot-state |
 | 005 | login | One entry page for six kinds of people, never asking an under-13 student for an email or birthday | — | login, onboarding, coppa, student, teacher, parent, camp |
+| 006 | code-buddy | What shape should AI take: chat, persistent Cloudflare agent, notes on blocks, hardware pit crew, or teacher-only copilot? | — | ai, code-buddy, cloudflare, classroom, guardrails |

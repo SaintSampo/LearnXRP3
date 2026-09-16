@@ -45,7 +45,7 @@
 .li .st{display:flex;align-items:center;gap:8px;font-size:13px}
 .li .st i{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--color-success);flex:none}
 .li .st i.amber{background:var(--amber)}
-.li .rb{font-family:var(--font-mono);font-size:12px;color:var(--color-text-muted)}
+.li .robotcell{font-family:var(--font-mono);font-size:12px;color:var(--color-text-muted)}
 .li.new{background:#F3FBF6}
 .backup{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0 0}
 .backup .card h3{font-size:16px;margin:4px 0 8px}
@@ -134,7 +134,7 @@ function admitIdx(i){const p=Q.splice(i,1)[0];renderQ();admit(p,false)}
 function denyIdx(i){const p=Q.splice(i,1)[0];renderQ();LX.emit('lx.deny',{name:p.n});LX.toast(p.n+' was not let in.')}
 function admitAll(){const all=Q.splice(0);renderQ();all.forEach(p=>admit(p,false))}
 function admit(p,auto){const i=roster.length;roster.push({n:p.n,d:p.d,tag:LX.newTag(),step:STEPS[i%STEPS.length]||3,app:'Blocks Lab',robot:i%3===0?'XRP-'+(3000+i*7).toString(16).toUpperCase().slice(-4):null,min:i%4===2?12+i:0,fresh:true});LX.set({roster});LX.emit('lx.admit',{name:p.n});renderList();paintRoom();LX.toast(auto?`${p.n} is back on ${p.d}. Let in automatically.`:`${p.n} is in.`)}
-function renderList(){const l=document.getElementById('list');l.innerHTML=`<div class="li hd"><span>${t('student')}</span><span>${t('progressCol')}</span><span>${t('rightNow')}</span><span>${t('robotCol')}</span></div>`+(roster.length?roster.map(r=>`<div class="li ${r.fresh?'new':''}"><span class="nm">${r.n}<small>${r.tag} · ${r.d}</small></span><span class="p"><span class="bar"><i style="width:${Math.round(r.step/7*100)}%"></i></span>${t('stepOf',{s:r.step})}</span><span class="st"><i class="${r.min?'amber':''}"></i>${r.min?t('quiet',{m:r.min,a:r.app}):t('working',{a:r.app})}</span><span class="rb">${r.robot||'—'}</span></div>`).join(''):`<div class="li" style="color:var(--color-text-muted);grid-template-columns:1fr">${t('appear')}</div>`);document.getElementById('sum').textContent=t('inRoom',{n:roster.length});setTimeout(()=>{roster.forEach(r=>r.fresh=false);l.querySelectorAll('.li.new').forEach(e=>e.classList.remove('new'))},1500)}
+function renderList(){const l=document.getElementById('list');l.innerHTML=`<div class="li hd"><span>${t('student')}</span><span>${t('progressCol')}</span><span>${t('rightNow')}</span><span>${t('robotCol')}</span></div>`+(roster.length?roster.map(r=>`<div class="li ${r.fresh?'new':''}"><span class="nm">${r.n}<small>${r.tag} · ${r.d}</small></span><span class="p"><span class="bar"><i style="width:${Math.round(r.step/7*100)}%"></i></span>${t('stepOf',{s:r.step})}</span><span class="st"><i class="${r.min?'amber':''}"></i>${r.min?t('quiet',{m:r.min,a:r.app}):t('working',{a:r.app})}</span><span class="robotcell">${r.robot||'—'}</span></div>`).join(''):`<div class="li" style="color:var(--color-text-muted);grid-template-columns:1fr">${t('appear')}</div>`);document.getElementById('sum').textContent=t('inRoom',{n:roster.length});setTimeout(()=>{roster.forEach(r=>r.fresh=false);l.querySelectorAll('.li.new').forEach(e=>e.classList.remove('new'))},1500)}
 function simulate(){if(!S.roomOpen){LX.toast(t('roomClosedMsg'));return}let i=0;const f=setInterval(()=>{if(i>=SIMS.length){clearInterval(f);return}arrive(SIMS[i++])},1500)}
 paintRoom();renderQ();renderList();
 /* backups: provider + last backup time live in state; Download writes a real JSON file */
