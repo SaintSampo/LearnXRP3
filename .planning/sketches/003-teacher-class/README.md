@@ -22,6 +22,7 @@ open .planning/sketches/003-teacher-class/index.html
 - **E: Experiential, playful** — navy-to-blue gradient class-code hero with a red slash, stat tiles with colored dots, then student cards with a colored top stripe (blue working, red stuck, grey away), brand-colored avatars and progress rings. Heading reads "Who needs you right now".
 - **F: Calm class list** — no shapes, no stat tiles, no red. One sentence sums up the room, then a plain list: student, progress, "right now" in words (working in Blocks Lab, quiet for 14 min, not here today), robot. Class code sits in a quiet pill. Login cards replace picture passwords.
 - **G: One thing at a time** — the open assignment as a single card with one segmented bar and three groups in words: Ahead, On track, Might want a hand. Below it, "Next up" with what to bring and read, and a small Class card. Nothing to configure on this screen.
+- **H: Teacher hosts the room** — Jacob's idea: no login cards, no passwords. Starting class opens a room keyed to the class code. Students type the code and a first name; the name travels to the teacher's browser (end-to-end encrypted through the relay, never stored on the server) and appears in an "Asking to join" queue. The teacher's "Let in" click is the password. Known names can be let back in automatically. Includes a phone-sized "what a student sees" inset that talks to the queue.
 
 ## What to Look For
 - "Put it on the board" opens a projector-sized code screen in every variant. Is the join URL clear enough for a nine-year-old?

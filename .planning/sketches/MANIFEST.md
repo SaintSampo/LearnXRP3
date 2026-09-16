@@ -12,6 +12,8 @@ A fifth variant, **Experiential, playful**, extends the site brand with playful 
 
 Jacob liked the playful Experiential aesthetic and asked for two revisions per screen on it, each leaning a notch more "classroom tool": student home cards must say where they go (F: cards with destination screenshots, G: list plus preview with "when you press Open"); the running app must show the real look of the apps in the frame (F: XRPCode Blocks as on xrpcode.wpi.edu, G: XRPCode Python plus its Dashboard); the teacher view must put less pressure on teachers and drop the picture-password shapes (F: calm list in words, G: one assignment, three groups).
 
+Jacob then asked to remove printed login cards entirely and proposed that a student's computer send their name directly to the teacher's computer. Sketch 003 variant H ("Teacher hosts the room") models this: presence is the password, names are end-to-end encrypted student-to-teacher, and the server stores only tags.
+
 ## Themes
 `themes/default.css` carries all five palettes scoped as `.theme-playful`, `.theme-clean`, `.theme-classroom`, `.theme-experiential`, `.theme-experiential-play`. The sketch toolbar can force one theme onto every variant.
 
