@@ -93,9 +93,9 @@ a{color:var(--color-secondary)}
 .rb .lang option{color:#222}
 .rb .me{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;background:rgba(255,255,255,.14);border-radius:999px;padding:4px 12px 4px 4px;white-space:nowrap;text-decoration:none;color:#fff}
 .rb .me .av{width:26px;height:26px;border-radius:50%;background:var(--acc);border:2px solid #fff;display:grid;place-items:center;font-size:10px;font-weight:800}
-.rb .chip.buddy{background:#fff;color:var(--color-secondary)}
-.rb .chip.buddy .bi{width:16px;height:16px;display:inline-block}
-.rb .chip.buddy .bi svg{width:16px;height:16px;display:block}
+.rb .chip.buddy,.rb .chip.lesson{background:#fff;color:var(--color-secondary)}
+.rb .chip.buddy .bi,.rb .chip.lesson .bi{width:16px;height:16px;display:inline-block}
+.rb .chip.buddy .bi svg,.rb .chip.lesson .bi svg{width:16px;height:16px;display:block}
 .rb .gear{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.14);border:0;color:#fff;cursor:pointer;display:grid;place-items:center}
 .rb .gear:hover{background:rgba(255,255,255,.26)}
 .rb .gear svg{width:18px;height:18px}

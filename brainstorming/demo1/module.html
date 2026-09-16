@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LearnXRP · Module</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M38 4h-9L2 36h9z' fill='%230A6EFF'/%3E%3Cpath d='M2 4h9l27 32h-9z' fill='%23D1182C'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+body{height:100vh;overflow:hidden;zoom:1}
+#ribbon{zoom:var(--ui-zoom)}
+.coach{zoom:var(--ui-zoom)}
+.mid{flex:1;display:grid;grid-template-columns:calc(350px * var(--ui-zoom)) 1fr;min-height:0;gap:calc(16px * var(--ui-zoom));padding:calc(16px * var(--ui-zoom));height:calc(100vh - var(--ribbon-h) * var(--ui-zoom))}
+.mid.buddy{grid-template-columns:calc(350px * var(--ui-zoom)) 1fr calc(340px * var(--ui-zoom))}
+.mid.buddy.collapsed{grid-template-columns:calc(44px * var(--ui-zoom)) 1fr calc(340px * var(--ui-zoom))}
+.mid.buddy.hidebuddy{grid-template-columns:calc(350px * var(--ui-zoom)) 1fr}
+.mid.buddy.hidebuddy .bd{display:none}
+.mid.buddy.solo{grid-template-columns:1fr calc(340px * var(--ui-zoom))}
+.mid.buddy.solo.hidebuddy{grid-template-columns:1fr}
+.bd{zoom:var(--ui-zoom);background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-sm);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.bd .hd{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--color-border)}
+.bd .bot{width:34px;height:34px;border-radius:12px;background:var(--color-accent-soft);display:grid;place-items:center;flex:none}
+.bd .bot svg{width:22px;height:22px}
+.bd .ctx{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:8px 14px;background:var(--color-bg);border-bottom:1px solid var(--color-border)}
+.bd .ctx .pill{cursor:pointer}
+.bd .ctx .pill.off{opacity:.45;text-decoration:line-through}
+.bd .log{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:0;justify-content:flex-end}
+.bd .msg{flex:none;width:fit-content;max-width:90%;min-width:55%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.5}
+.bd .msg.me{align-self:flex-end;background:var(--color-secondary);color:#fff;border-bottom-right-radius:4px}
+.bd .msg.ai{align-self:flex-start;background:var(--color-accent-soft);border-bottom-left-radius:4px}
+.bd .msg b{font-weight:600}
+.bd .msg .why{display:block;font-size:11px;color:var(--color-text-muted);margin-top:6px}
+.bd .quick{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 10px}
+.bd .quick button{font:600 11px var(--font-sans);border:1px solid var(--color-border);background:#fff;border-radius:999px;padding:4px 10px;cursor:pointer;color:var(--color-secondary)}
+.bd .in{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--color-border)}
+.bd .in input{flex:1;font:500 13px var(--font-sans);padding:9px 12px;border:1px solid var(--color-border);border-radius:999px;min-width:0}
+.bd .seen{font-size:11px;color:var(--color-text-muted);padding:8px 14px;background:var(--color-bg);display:flex;align-items:center;gap:6px}
+@media (max-width:900px){.mid.buddy,.mid.buddy.collapsed{grid-template-columns:1fr}}
+.mid.solo{grid-template-columns:1fr}
+.mid.reader .frame{width:100%;max-width:1500px;margin:0 auto}
+.mid.solo .coach{display:none}
+.mid.collapsed{grid-template-columns:calc(44px * var(--ui-zoom)) 1fr}
+.coach{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto}
+.mid.collapsed .coach > *:not(.tog){display:none}
+.tile{background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-sm);padding:16px}
+.head{display:flex;align-items:center;gap:12px}
+.step{background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-sm);border-inline-start:4px solid var(--color-secondary);padding:16px;font-size:14px}
+.step h2{font-size:17px;margin:2px 0 6px}
+.step p{color:var(--color-text-muted)}
+.step p b{font-weight:600;color:var(--color-text)}
+.rule{background:#fff;border-radius:var(--radius-sm);padding:8px 10px;font-size:12px;display:flex;gap:8px;align-items:center;margin-top:10px;border:1px solid var(--color-border)}
+.rule.done{border-color:var(--color-success);background:#E3F5EA;color:var(--color-success)}
+.hint{background:var(--color-accent-soft);border-radius:var(--radius-sm);padding:10px 12px;font-size:13px;display:none;margin-top:10px}
+.hint.open{display:block}
+.steplist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.steplist li{display:flex;gap:10px;align-items:center;font-size:13px;padding:6px 8px;border-radius:999px;color:var(--color-text-muted);cursor:pointer}
+.steplist li i{width:22px;height:22px;border-radius:50%;border:2px solid var(--color-border);display:grid;place-items:center;font-size:11px;font-weight:800;flex:none;background:#fff}
+.steplist li.done{color:var(--color-text)}
+.steplist li.done i{background:var(--color-success);border-color:var(--color-success);color:#fff}
+.steplist li.now{background:var(--color-accent-soft);color:var(--color-secondary);font-weight:600}
+.steplist li.now i{border-color:var(--color-accent);color:var(--color-accent)}
+.bridge{margin-top:auto;background:var(--color-dark);color:#fff;border-radius:var(--radius-md);padding:12px 16px;font-family:var(--font-mono);font-size:11px;display:flex;gap:14px;flex-wrap:wrap}
+.bridge b{font-weight:500;color:rgba(255,255,255,.6)}
+.bridge .dot{width:8px;height:8px;border-radius:50%;background:var(--color-success);display:inline-block;margin-inline-end:6px;vertical-align:middle}
+.frame{background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-md);overflow:hidden;position:relative;min-height:0;display:flex}
+.frame iframe{border:0;width:100%;height:100%;flex:1;background:#fff}
+.frame-tag{position:absolute;bottom:8px;inset-inline-end:8px;zoom:var(--ui-zoom);font:11px var(--font-mono);background:rgba(28,34,48,.85);color:#fff;padding:3px 8px;border-radius:4px;pointer-events:none}
+.ph{flex:1;display:grid;place-items:center;background:repeating-linear-gradient(135deg,#f3f4f6 0 8px,#e9ebef 8px 16px);text-align:center;padding:24px}
+.ph .thumb{width:min(520px,90%);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-md);margin:0 auto 16px}
+.ph .thumb svg{width:100%;display:block}
+.tog{align-self:flex-start}
+@media (max-width:900px){body{overflow:auto}.mid{grid-template-columns:1fr;height:auto}.frame{min-height:70vh}}
+</style>
+</head>
+<body>
+<header id="ribbon" class="rb"></header>
+<div class="mid" id="mid">
+  <aside class="coach" id="coach"></aside>
+  <div class="frame" id="frame"></div>
+</div>
+<script src="assets/shell.js"></script>
+<script>
+const S=LX.S,t=LX.t;
+if(S.role==='guest'&&!S.name){location.replace('index.html')}
+const _q=new URLSearchParams(location.search);const app=LX.MODULES.find(a=>a.id===(_q.get('module')||_q.get('app')))||LX.MODULES[0];
+const LMS_ON=!!(S.lms&&S.lms!=='off')&&app.lesson!==false;
+const L=LX.LESSON;
+let step=S.step,done=new Set(S.doneSteps||[]);
+LX.ribbon({crumb:LMS_ON?`<a href="home.html">${t('home')}</a> / ${L.unit} / <b>${L.title}</b> · ${app.name}`:`<a href="home.html">${t('home')}</a> / <b>${app.name}</b> <span style="opacity:.7">· ${app.provider}</span>`});
+document.title='LearnXRP · '+app.name;
+function lockLabel(){return S.robot==='ok'||S.robot==='low'?`XRP-3F2A → ${app.id==='xrpcode'||app.id==='python'?'wpi.xrpweb':app.id}`:t('free')}
+function renderCoach(){const s=L.steps[step-1];const isDone=done.has(step);
+ const stepHtml=app.lesson!==false?`<div class="step"><span class="eyebrow">${t('step')} ${step} ${t('of')} 7</span><h2>${s.t}</h2><p>${s.b}</p><div class="rule ${isDone?'done':''}"><span>${isDone?'✓':'○'}</span><span>${s.r}</span></div><div class="hint" id="hint">${s.h}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn btn-out sm" onclick="toggleHint(this)">${t('hint')}</button>${isDone?`<button class="btn btn-primary sm" onclick="nextStep()">${t('nextStep')}</button>`:`<button class="btn btn-primary sm" onclick="didIt()">${t('didIt')}</button>`}</div><div class="muted" style="font-size:11px;margin-top:10px">${t('checks')}</div></div>`
+ :`<div class="step"><span class="eyebrow">${t('lesson')}</span><h2>${L.title} · ${t('step')} ${step}</h2><p>Read the <b>Reflectance</b> page in Unit 2, then come back to Blocks Lab for step ${step}.</p><div style="display:flex;gap:8px;margin-top:12px"><a class="btn btn-primary sm" href="module.html?module=xrpcode">${t('open')} Blocks Lab</a></div></div>`;
+ document.getElementById('coach').innerHTML=`<button class="btn btn-ghost sm tog" onclick="document.getElementById('mid').classList.toggle('collapsed')" title="Collapse">⇔</button>
+ <div class="tile head">${LX.ringSvg(done.size,7)}<div><span class="eyebrow">${LX.XMARK('#D1182C','#0A6EFF')} ${L.title}</span><div style="font-weight:600">${L.unit} · ${app.name}</div><div class="muted" style="font-size:12px">${S.classCode?t('dueFri')+' · '+S.teacher:t('syncLocal')}</div></div></div>
+ ${stepHtml}
+ <div class="tile" style="padding:12px 16px"><ul class="steplist">${L.steps.map((x,i)=>`<li class="${done.has(i+1)?'done':''} ${i+1===step?'now':''}" onclick="goStep(${i+1})"><i>${done.has(i+1)?'✓':i+1}</i>${x.t}</li>`).join('')}</ul></div>
+ ${app.id!=='sim'&&app.id!=='docs'?`<div class="tile" style="padding:10px 14px;font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:8px"><span>${t('noRobotToday')}</span><a class="btn btn-out sm" href="module.html?module=sim">${t('useSim')}</a></div>`:''}
+ <div class="bridge"><span><i class="dot"></i>${app.id==='xrpcode'||app.id==='python'?'wpi.xrpweb':app.id}</span><span><b>${t('robot')}</b> ${lockLabel()}</span><span><b>${t('saved')}</b> ${S.sync==='local'?'local':'2s'}</span><span><b>${t('progress')}</b> ${isDone?t('done',{s:step}):t('pending',{s:step})}</span></div>`}
+function renderFrame(){const f=document.getElementById('frame');if(app.url){f.innerHTML=`<iframe src="${app.url}" allow="${app.allow}" title="${app.name}" referrerpolicy="no-referrer-when-downgrade"></iframe><span class="frame-tag">iframe · ${new URL(app.url).host}${app.allow?' · allow='+app.allow.replace(/;\s*/g,' '):''}</span>`}else{f.innerHTML=`<div class="ph"><div><div class="thumb">${LX.THUMBS[app.thumb]}</div><div style="font-weight:600;font-size:18px">${app.name} · ${app.provider}</div><div class="muted" style="font-size:14px;margin-top:6px">${t('placeholder',{a:app.name})}</div></div></div><span class="frame-tag">iframe · (no public build yet)</span>`}}
+function toggleHint(b){const h=document.getElementById('hint');h.classList.toggle('open');b.textContent=h.classList.contains('open')?t('hideHint'):t('hint')}
+function didIt(){done.add(step);LX.set({doneSteps:[...done]});renderCoach();LX.toast('bridge: progress {step '+step+', done}')}
+function nextStep(){if(step<7){step++;LX.set({step});renderCoach();LX.toast('bridge: context {activity: '+L.id+'/step-'+step+'} sent to app')}}
+function goStep(n){step=n;LX.set({step});renderCoach()}
+const _mid=document.getElementById('mid');if(app.lesson===false)_mid.classList.add('solo','reader');if(!LMS_ON){_mid.classList.add('solo')}else{renderCoach()}renderFrame();
+function toggleLesson(){if(!LMS_ON){LX.toast('Lesson panel is off. Turn it on in demo settings (gear).');return}_mid.classList.toggle('solo')}
+/* Code Buddy sidekick (demo settings → Code Buddy → on). Canned Socratic replies; the real one gets the same context over the bridge. */
+const BUDDY_ON=S.buddy&&S.buddy!=='off'&&app.lesson!==false;
+function toggleBuddy(){const m=document.getElementById('mid');if(!m.classList.contains('buddy')){LX.toast('Code Buddy is off. Turn it on in demo settings (gear).');return}m.classList.toggle('hidebuddy')}
+const REPLIES=[[/answer/i,"I won't hand you the answer, but here is a smaller question: the shell printed <b>0.08</b> on the floor. Is that closer to 0 or to 1? Whatever it is, the tape will be the other one.","Rule: hints, not answers. Third time I offer a worked example on the rangefinder instead."],[/reflect/i,"Reflectance is how much light bounces back. White floor bounces a lot, black tape almost none. The sensor gives a number from 0 to 1. Which end do you think is black?","From the Reflectance docs page, which is in your context."],[/0\.08|print|shell/i,"0.08 is what the floor looks like to the sensor: bright, so a small number. Hold the robot over the tape and run again. What number do you expect?","I can see the last telemetry frame: reflectance_left = 0.08."],[/.*/,"Good question. Look at your program: what block from Sensors would give the print block something to say?","I can see the program on screen once the bridge exists; for now I only know the step."]];
+function renderBuddy(){if(!BUDDY_ON)return;const m=document.getElementById('mid');m.classList.add('buddy');const s=L.steps[step-1];m.insertAdjacentHTML('beforeend',`<aside class="bd" id="bd"><div class="hd"><span class="bot">${LX.BOT}</span><div><div style="font-weight:600">Code Buddy</div><div class="muted" style="font-size:11px">Step ${step} · your blocks · ${S.robot==='ok'?'XRP-3F2A':'no robot'}</div></div><span class="pill green" style="margin-inline-start:auto"><i></i>on</span></div><div class="ctx"><span class="muted" style="font-size:11px;align-self:center">Can see:</span><span class="pill blue" onclick="this.classList.toggle('off')">the step</span><span class="pill blue" onclick="this.classList.toggle('off')">my blocks</span><span class="pill blue" onclick="this.classList.toggle('off')">the robot</span></div><div class="log" id="bd-log"><div class="msg ai">Hi ${S.name||'there'}. You are on <b>step ${step}, ${s.t.toLowerCase()}</b>. ${step===3?'I can see your program has a print block but nothing inside it yet. What do you think goes in there?':'What have you tried so far?'}</div></div><div class="quick"><button onclick="askBuddy('What does reflectance mean?')">What does reflectance mean?</button><button onclick="askBuddy('Why does it print 0.08?')">Why does it print 0.08?</button><button onclick="askBuddy('Just tell me the answer')">Just tell me the answer</button></div><div class="in"><input id="bd-in" placeholder="Ask about your program, the robot, or the step" onkeydown="if(event.key==='Enter')askBuddy(this.value)"><button class="btn btn-primary sm" onclick="askBuddy(document.getElementById('bd-in').value)">Ask</button></div><div class="seen"><svg width="12" height="12" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="#22527B" stroke-width="1.6"/><circle cx="8" cy="8" r="2" fill="#22527B"/></svg>${S.teacher} can see this chat. Nothing here leaves the class.</div></aside>`)}
+function askBuddy(q){q=(q||'').trim();if(!q)return;const log=document.getElementById('bd-log');log.insertAdjacentHTML('beforeend',`<div class="msg me">${q.replace(/</g,'&lt;')}</div>`);document.getElementById('bd-in').value='';const r=REPLIES.find(x=>x[0].test(q));setTimeout(()=>{log.insertAdjacentHTML('beforeend',`<div class="msg ai">${r[1]}<span class="why">${r[2]}</span></div>`);log.scrollTop=1e4},600);log.scrollTop=1e4}
+renderBuddy();
+
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
    Plain JS, no build. Everything lives in localStorage under one key. */
 (function(){
 const KEY='lx.demo1';
-const DEF={lang:'en',brand:'experiential',robot:'none',sync:'local',role:'guest',name:null,tag:null,classCode:null,className:'Period 3 Robotics',teacher:'Ms. Rivera',remembered:[],step:3,device:'Chromebook 04',roomOpen:false,autoAdmit:true,roster:[],doneSteps:[1,2],buddy:'off'};
+const DEF={lang:'en',brand:'experiential',robot:'none',sync:'local',role:'guest',name:null,tag:null,classCode:null,className:'Period 3 Robotics',teacher:'Ms. Rivera',remembered:[],step:3,device:'Chromebook 04',roomOpen:false,autoAdmit:true,roster:[],doneSteps:[1,2],buddy:'off',lms:'off'};
 function load(){try{return Object.assign({},DEF,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){return Object.assign({},DEF)}}
 const S=load();
 /* deep link: ?lx={"role":"student","name":"Maya"} seeds state (demo affordance) */
@@ -36,10 +36,10 @@ en:{
  demoAdmit:'Demo: no teacher tab is open, so you were let in automatically. Open teacher.html in another tab to try the real flow.',notLetIn:'Your teacher did not let you in. Ask them, or check the code.',
  // home
  todayIn:'Today in {c}',lessonLine:'Line follower · step {s}: {t}',warmup:'Warm-up quiz',dueFri:'Due Friday',opensIn:'Opens in Blocks Lab (XRPCode)',continueLesson:'Continue lesson',
- apps:'Apps',appsSub:'Every card says where it opens, what you do there, and what you need.',youNeed:'You need',lastTime:'Last time',staysIn:'Stays in',open:'Open',needsRobot:'needs robot',noRobotNeeded:'no robot needed',phoneOk:'phone ok',askTeacher:'ask your teacher',never:'never',frame:'LearnXRP, in a frame',
+ apps:'Modules',appsSub:'Every card says where it opens, what you do there, and what you need.',lessonPanel:'Lesson',youNeed:'You need',lastTime:'Last time',staysIn:'Stays in',open:'Open',needsRobot:'needs robot',noRobotNeeded:'no robot needed',phoneOk:'phone ok',askTeacher:'ask your teacher',never:'never',frame:'LearnXRP, in a frame',
  // app
  step:'Step',of:'of',hint:'Hint',hideHint:'Hide hint',nextStep:'Next step',didIt:'I did it',checks:'Checks itself once the bridge exists. For now, tell us when you did it.',lesson:'Lesson',noRobotToday:'No robot today?',useSim:'Use the simulator',
- backHome:'Home',bridge:'bridge',robot:'robot',saved:'saved',progress:'progress',free:'free',pending:'step {s} pending',done:'step {s} done',placeholder:'{a} would load here. Same lesson, same progress events.',
+ backHome:'Home',bridge:'bridge',robot:'robot',saved:'saved',progress:'progress',free:'free',pending:'step {s} pending',done:'step {s} done',placeholder:'{a} would load here. Same module contract, same progress events.',
  // teacher
  startClass:'Start class',endClass:'End class',roomClosedMsg:'Room is closed. Start class to let students in.',roomOpenMsg:'Room is open. Students can join with the code on the board.',classEnded:'Class ended. {n} students were here. Roster is saved on this computer.',
  codeHelp:'Students open <b>{u}</b>, type the code and their name. That is all.',showBoard:'Show on board',lock:"Names travel from each student's computer to this one, encrypted with the class code. LearnXRP's server only ever sees tags like Otter-42.",
@@ -62,9 +62,9 @@ es:{
  waitTitle:'Un momento, {n}',waitSub:'{t} te está dejando entrar…',inTitle:'¡Ya estás dentro, {n}!',inSub:'{c} · hoy: Seguidor de línea, paso {s}',letsGo:'Vamos',badCode:'Los códigos son como XRP-7K2Q. Pregunta a tu docente.',
  demoAdmit:'Demo: no hay una pestaña de docente abierta, así que entraste automáticamente. Abre teacher.html en otra pestaña para probar el flujo real.',notLetIn:'Tu docente no te dejó entrar. Pregúntale o revisa el código.',
  todayIn:'Hoy en {c}',lessonLine:'Seguidor de línea · paso {s}: {t}',warmup:'Cuestionario inicial',dueFri:'Para el viernes',opensIn:'Se abre en Blocks Lab (XRPCode)',continueLesson:'Continuar lección',
- apps:'Aplicaciones',appsSub:'Cada tarjeta dice dónde se abre, qué haces ahí y qué necesitas.',youNeed:'Necesitas',lastTime:'Última vez',staysIn:'Se queda en',open:'Abrir',needsRobot:'necesita robot',noRobotNeeded:'sin robot',phoneOk:'móvil ok',askTeacher:'pregunta a tu docente',never:'nunca',frame:'LearnXRP, en un marco',
+ apps:'Módulos',appsSub:'Cada tarjeta dice dónde se abre, qué haces ahí y qué necesitas.',lessonPanel:'Lección',youNeed:'Necesitas',lastTime:'Última vez',staysIn:'Se queda en',open:'Abrir',needsRobot:'necesita robot',noRobotNeeded:'sin robot',phoneOk:'móvil ok',askTeacher:'pregunta a tu docente',never:'nunca',frame:'LearnXRP, en un marco',
  step:'Paso',of:'de',hint:'Pista',hideHint:'Ocultar pista',nextStep:'Siguiente paso',didIt:'Lo hice',checks:'Se comprobará solo cuando exista el puente. Por ahora, dinos cuando lo hagas.',lesson:'Lección',noRobotToday:'¿Sin robot hoy?',useSim:'Usar el simulador',
- backHome:'Inicio',bridge:'puente',robot:'robot',saved:'guardado',progress:'progreso',free:'libre',pending:'paso {s} pendiente',done:'paso {s} hecho',placeholder:'{a} se cargaría aquí. Misma lección, mismos eventos de progreso.',
+ backHome:'Inicio',bridge:'puente',robot:'robot',saved:'guardado',progress:'progreso',free:'libre',pending:'paso {s} pendiente',done:'paso {s} hecho',placeholder:'{a} se cargaría aquí. Mismo contrato de módulo, mismos eventos de progreso.',
  startClass:'Empezar clase',endClass:'Terminar clase',roomClosedMsg:'La sala está cerrada. Empieza la clase para dejar entrar a los alumnos.',roomOpenMsg:'La sala está abierta. Los alumnos pueden entrar con el código de la pizarra.',classEnded:'Clase terminada. {n} alumnos estuvieron aquí. La lista se guarda en este equipo.',
  codeHelp:'Los alumnos abren <b>{u}</b>, escriben el código y su nombre. Eso es todo.',showBoard:'Mostrar en la pizarra',lock:'Los nombres viajan del equipo de cada alumno a este, cifrados con el código de clase. El servidor de LearnXRP solo ve etiquetas como Otter-42.',
  asking:'Piden entrar',letAll:'Dejar entrar a todos',nobodyYet:'Nadie todavía. Empieza la clase y los nombres aparecerán aquí.',letIn:'Dejar entrar',notMine:'No es mío',beenBefore:'ya estuvo aquí',newName:'nombre nuevo',
@@ -84,13 +84,13 @@ ar:{
  welcomeBack:'أهلاً بعودتك. من أنت اليوم؟',rememberSub:'هذا الحاسوب يتذكر من استخدمه في هذا الصف. اضغط اسمك ومعلّمك يسمح لك بالدخول.',newHere:'+ أنا جديد هنا',
  namesLive:'الأسماء تبقى على هذا الحاسوب وحاسوب معلّمك. ليس على LearnXRP.',forget:'انسَ الجميع',diffClass:'صف مختلف؟',joinCode:'انضم برمز',next:'التالي',educators:'المعلّمون',signIn:'تسجيل الدخول',
  waitTitle:'انتظر قليلاً، {n}',waitSub:'{t} يسمح لك بالدخول…',inTitle:'دخلت، {n}!',inSub:'{c} · اليوم: متتبع الخط، الخطوة {s}',letsGo:'لنبدأ',badCode:'الرموز تبدو مثل XRP-7K2Q. اسأل معلّمك.',
- todayIn:'اليوم في {c}',lessonLine:'متتبع الخط · الخطوة {s}: {t}',continueLesson:'تابع الدرس',apps:'التطبيقات',open:'افتح',step:'الخطوة',of:'من',hint:'تلميح',nextStep:'الخطوة التالية',lesson:'الدرس',backHome:'الرئيسية',
+ todayIn:'اليوم في {c}',lessonLine:'متتبع الخط · الخطوة {s}: {t}',continueLesson:'تابع الدرس',apps:'الوحدات',lessonPanel:'الدرس',open:'افتح',step:'الخطوة',of:'من',hint:'تلميح',nextStep:'الخطوة التالية',lesson:'الدرس',backHome:'الرئيسية',
  startClass:'ابدأ الحصة',endClass:'أنهِ الحصة',asking:'يطلبون الانضمام',letIn:'اسمح بالدخول',notMine:'ليس طالبي',letAll:'اسمح للجميع',footer1:'الأجهزة والمنهج ودعم المعلّم.',footer2:'الطلاب رموز، ليسوا أسماء. معلّمك يحمل المفتاح.'
 }};
 function t(k,v){let s=(T[S.lang]&&T[S.lang][k])||T.en[k]||k;if(v)Object.keys(v).forEach(x=>{s=s.split('{'+x+'}').join(v[x])});return s}
 function i18n(root){(root||document).querySelectorAll('[data-i18n]').forEach(e=>{const k=e.dataset.i18n;const v=e.dataset.i18nVars?JSON.parse(e.dataset.i18nVars):null;if(e.dataset.i18nHtml!==undefined)e.innerHTML=t(k,v);else e.textContent=t(k,v)});(root||document).querySelectorAll('[data-i18n-ph]').forEach(e=>e.placeholder=t(e.dataset.i18nPh))}
 
-/* ---------- lesson + apps registry (what the shell knows) ---------- */
+/* ---------- lesson + module registry (what the shell knows). A module is anything that opens in the frame. ---------- */
 const LESSON={id:'unit-2/line-follower',title:'Line follower',unit:'Unit 2',steps:[
  {t:'Meet the sensor',b:'Find the two reflectance sensors under the front of your robot. What color are they looking at right now?',r:'Look under the robot and find both sensors',h:'They are the two small black squares near the front edge.'},
  {t:'Where does it go?',b:'Open Sensors in the toolbox and drag out <b>reflectance left</b>. Drop it anywhere on the workspace.',r:'A reflectance block is on the workspace',h:'Sensors is the orange category.'},
@@ -139,8 +139,9 @@ function ribbon(opts){opts=opts||{};LX._opts=opts;const b=brand();const el=docum
  const right=S.role==='teacher'?`<span class="chip ${S.roomOpen?'ok':''}"><i></i>${S.roomOpen?t('studentsIn',{n:(S.roster||[]).length}):t('roomClosed')}</span>`:robotChip();
  const langSel=`<select class="lang" title="Language" onchange="LX.setLang(this.value)"><option value="en"${S.lang==='en'?' selected':''}>EN</option><option value="es"${S.lang==='es'?' selected':''}>ES</option><option value="ar"${S.lang==='ar'?' selected':''}>AR</option></select>`;
  const gear=`<button class="gear" title="${t('settings')}" onclick="LX.menu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button>`;
+ const lesson=S.lms&&S.lms!=='off'?`<button class="chip lesson" title="Lesson panel" onclick="if(window.toggleLesson)toggleLesson();else LX.toast('The lesson panel opens beside a module. Open Blocks Lab.')"><span class="bi">${XMARK('#D1182C','#0A6EFF')}</span>${t('lessonPanel')}</button>`:'';
  const buddy=S.buddy&&S.buddy!=='off'?`<button class="chip buddy" title="Code Buddy" onclick="if(window.toggleBuddy)toggleBuddy();else LX.toast('Code Buddy opens beside an app. Open Blocks Lab.')"><span class="bi">${BOT}</span>Code Buddy</button>`:'';
- el.innerHTML=(b.motif?'<span class="motif"></span>':'')+brandEl+`<span class="crumb">${opts.crumb||''}</span><span class="sp"></span>`+buddy+right+syncDot()+langSel+me()+gear;
+ el.innerHTML=(b.motif?'<span class="motif"></span>':'')+brandEl+`<span class="crumb">${opts.crumb||''}</span><span class="sp"></span>`+lesson+buddy+right+syncDot()+langSel+me()+gear;
  if(!document.getElementById('lx-menu')){const m=document.createElement('div');m.id='lx-menu';m.className='lx-menu';document.body.appendChild(m);document.addEventListener('click',e=>{if(!m.contains(e.target)&&!e.target.closest('.gear'))m.classList.remove('open')})}}
 function setLang(l){set({lang:l});location.reload()}
 function menu(){const m=document.getElementById('lx-menu');if(m.classList.contains('open')){m.classList.remove('open');return}
@@ -151,6 +152,7 @@ function menu(){const m=document.getElementById('lx-menu');if(m.classList.contai
  <label>Sync<select onchange="LX.set({sync:this.value});LX.ribbon(LX._opts)">${opt([['local','local only (no class)'],['synced','synced to class'],['off','offline, queued']],S.sync)}</select></label>
  <label>Brand config<select onchange="LX.set({brand:this.value});location.reload()">${opt([['experiential','Experiential (default)'],['educabot','Educabot (example)'],['firstglobal','FIRST Global (example)']],S.brand)}</select></label>
  <label>Language<select onchange="LX.setLang(this.value)">${opt([['en','English'],['es','Español'],['ar','العربية (RTL)']],S.lang)}</select></label>
+ <label>Lesson panel<select onchange="LX.set({lms:this.value});location.reload()">${opt([['off','off (module only)'],['on','on · lesson beside the module']],S.lms||'off')}</select></label>
  <label>Code Buddy<select onchange="LX.set({buddy:this.value});location.reload()">${opt([['off','off (default for under 13)'],['sidekick','on · sidekick chat']],S.buddy||'off')}</select></label>
  <label>Lesson step<select onchange="LX.set({step:+this.value,doneSteps:Array.from({length:+this.value-1},(_,i)=>i+1)});location.reload()">${opt([1,2,3,4,5,6,7].map(n=>[String(n),'step '+n+' of 7']),String(S.step))}</select></label>
  <label>Device name<input type="text" value="${S.device}" onchange="LX.set({device:this.value})"></label>
@@ -158,7 +160,7 @@ function menu(){const m=document.getElementById('lx-menu');if(m.classList.contai
  <div class="chips">${(S.remembered||[]).length?S.remembered.map(r=>`<span>${r.name}</span>`).join(''):'<span class="muted">nobody yet</span>'}</div>
  <div class="row"><button class="btn sm btn-out" onclick="LX.set({remembered:[{name:'Maya',last:'yesterday',step:3},{name:'Jamal',last:'yesterday',step:4},{name:'Sofia',last:'Monday',step:2},{name:'Ethan',last:'last week',step:1}]});LX.toast('Seeded 4 remembered students');LX.menu();LX.menu()">Seed demo names</button><button class="btn sm btn-out" onclick="LX.set({remembered:[]});LX.toast('Forgot everyone on this device');LX.menu();LX.menu()">Forget everyone</button></div>
  <div class="sec">Pages</div>
- <div class="links"><a href="index.html">Login / welcome back</a><a href="home.html">Student home</a><a href="app.html?app=xrpcode">Running app (XRPCode)</a><a href="app.html?app=docs">Docs app</a><a href="teacher.html">Teacher room</a><a href="teacher.html" target="_blank" rel="noopener">Teacher in new tab</a></div>
+ <div class="links"><a href="index.html">Login / welcome back</a><a href="home.html">Student home</a><a href="module.html?module=xrpcode">Module: XRPCode</a><a href="module.html?module=docs">Module: Docs</a><a href="teacher.html">Teacher room</a><a href="teacher.html" target="_blank" rel="noopener">Teacher in new tab</a></div>
  <div class="sec">Danger</div>
  <div class="row"><button class="btn sm" style="color:var(--color-danger)" onclick="LX.reset()">Reset demo</button></div>`;
  m.classList.add('open')}
@@ -166,5 +168,5 @@ function menu(){const m=document.getElementById('lx-menu');if(m.classList.contai
 /* ---------- boot ---------- */
 document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';
 document.addEventListener('DOMContentLoaded',()=>{i18n();document.querySelectorAll('[data-footer]').forEach(f=>{f.innerHTML=`<div><b>Experiential Robotics</b> · ${t('footer1')}</div><div>${t('footer2')}</div>`})});
-window.LX={S,set,reset,t,i18n,brand,BRANDS,LESSON,APPS,THUMBS,newTag,toast,emit,on,ringSvg,initials,ribbon,cycleRobot,setLang,menu,XMARK,BOT};
+window.LX={S,set,reset,t,i18n,brand,BRANDS,LESSON,APPS,MODULES:APPS,THUMBS,newTag,toast,emit,on,ringSvg,initials,ribbon,cycleRobot,setLang,menu,XMARK,BOT};
 })();

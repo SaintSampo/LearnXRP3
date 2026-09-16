@@ -33,10 +33,10 @@
 <body>
 <header id="ribbon" class="rb"></header>
 <main class="band" style="flex:1">
-  <div class="today">
+  <div class="today" id="today">
     <span id="ring"></span>
     <div><span class="eyebrow" id="today-eyebrow"></span><div style="font-weight:600;font-size:17px" id="today-line"></div><div class="done"><span><b>✓</b> <span data-i18n="warmup">Warm-up quiz</span></span><span data-i18n="dueFri">Due Friday</span><span data-i18n="opensIn">Opens in Blocks Lab (XRPCode)</span></div></div>
-    <a class="btn btn-primary" href="app.html?app=xrpcode" data-i18n="continueLesson">Continue lesson</a>
+    <a class="btn btn-primary" href="module.html?module=xrpcode" data-i18n="continueLesson">Continue lesson</a>
   </div>
   <div class="hd"><div><h2 data-i18n="apps">Apps</h2><div class="sub" data-i18n="appsSub">Every card says where it opens, what you do there, and what you need.</div></div><a class="btn btn-out" href="index.html?new=1" data-i18n="joinCode">Join with a code</a></div>
   <div class="cards" id="cards"></div>
@@ -48,10 +48,11 @@ const S=LX.S,t=LX.t;
 if(S.role==='guest'&&!S.name){location.replace('index.html')}
 const st=LX.LESSON.steps[S.step-1];
 LX.ribbon({crumb:`<b>${t('home')}</b>`});
+document.getElementById('today').style.display=(S.lms&&S.lms!=='off')?'':'none';
 document.getElementById('ring').innerHTML=LX.ringSvg((S.doneSteps||[]).length,7);
 document.getElementById('today-eyebrow').innerHTML=LX.XMARK('#D1182C','#0A6EFF')+' '+(S.classCode?t('todayIn',{c:S.className}):t('home'));
 document.getElementById('today-line').textContent=t('lessonLine',{s:S.step,t:st.t});
-document.getElementById('cards').innerHTML=LX.APPS.map(a=>{const need=a.needs==='robot'?`<span class="pill blue"><i></i>${t('needsRobot')}</span>`:`<span class="pill green"><i></i>${t('noRobotNeeded')}</span>`;const phone=a.phone?`<span class="pill">${t('phoneOk')}</span>`:'';const tag=a.locked?'button':'a';const href=a.locked?'':`href="app.html?app=${a.id}"`;return `<${tag} class="ap ${a.locked?'locked':''}" ${href} ${a.locked?'disabled':''}><span class="thumb">${LX.THUMBS[a.thumb]}<span class="where">↗ ${a.opens}</span></span><span class="body"><h3>${a.name}</h3><span class="does">${a.does}</span><span class="kv"><b>${t('youNeed')}</b><span>${a.need}</span><b>${t('lastTime')}</b><span>${a.last}</span><b>${t('staysIn')}</b><span>${a.url?t('frame'):'LearnXRP'}</span></span><span class="foot"><span>${a.locked?`<span class="pill red">${t('askTeacher')}</span>`:need+phone}</span>${a.locked?'':`<span class="btn btn-primary sm">${t('open')} ${a.name}</span>`}</span></span></${tag}>`}).join('');
+document.getElementById('cards').innerHTML=LX.APPS.map(a=>{const need=a.needs==='robot'?`<span class="pill blue"><i></i>${t('needsRobot')}</span>`:`<span class="pill green"><i></i>${t('noRobotNeeded')}</span>`;const phone=a.phone?`<span class="pill">${t('phoneOk')}</span>`:'';const tag=a.locked?'button':'a';const href=a.locked?'':`href="module.html?module=${a.id}"`;return `<${tag} class="ap ${a.locked?'locked':''}" ${href} ${a.locked?'disabled':''}><span class="thumb">${LX.THUMBS[a.thumb]}<span class="where">↗ ${a.opens}</span></span><span class="body"><h3>${a.name}</h3><span class="does">${a.does}</span><span class="kv"><b>${t('youNeed')}</b><span>${a.need}</span><b>${t('lastTime')}</b><span>${a.last}</span><b>${t('staysIn')}</b><span>${a.url?t('frame'):'LearnXRP'}</span></span><span class="foot"><span>${a.locked?`<span class="pill red">${t('askTeacher')}</span>`:need+phone}</span>${a.locked?'':`<span class="btn btn-primary sm">${t('open')} ${a.name}</span>`}</span></span></${tag}>`}).join('');
 </script>
 </body>
 </html>

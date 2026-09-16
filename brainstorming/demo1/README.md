@@ -9,8 +9,8 @@ Live: https://saintsampo.github.io/LearnXRP3/ (deployed from this folder by `.gi
 | page | from sketch | what it does |
 |---|---|---|
 | `index.html` | Login A (two doors) with the code-first card from Login C; Welcome back from Login E | Students type a code and a first name and wait for the teacher. Educators sign in. Explorers skip accounts. When this device remembers students, the Welcome back view shows first. |
-| `home.html` | Student home F | Today strip plus app cards that say where they open, what you do there, and what you need. |
-| `app.html?app=…` | Running app G, Ribbon A | Lesson coach on the left, the real app in an iframe on the right. `xrpcode` loads https://xrpcode.wpi.edu/ with `allow="bluetooth; serial; usb"`. `docs` loads https://introtoroboticsv2.readthedocs.io/. Others are placeholders. |
+| `home.html` | Student home F | Module cards that say where they open, what you do there, and what you need. The Today strip appears when the lesson panel is on. |
+| `module.html?module=…` | Running app G, Ribbon A | A module is anything that opens in the frame. `xrpcode` loads https://xrpcode.wpi.edu/ with `allow="bluetooth; serial; usb"`. `docs` loads https://introtoroboticsv2.readthedocs.io/. Others are placeholders. The lesson panel and Code Buddy are layers the shell can add beside any module; both are off by default and switched on in demo settings. `app.html` redirects for old links. |
 | `teacher.html` | Teacher view H | Teacher hosts the room. Start class, names arrive in the queue, Let in. |
 | ribbon | Ribbon A + language + settings | 48px bar on every page: brand, crumb, robot chip, sync dot, language (EN / ES / AR with RTL), identity, and a gear that opens the demo settings menu. |
 
@@ -26,7 +26,7 @@ If no teacher tab is open, the student is let in after four seconds and a toast 
 
 ## Demo settings (gear in the ribbon)
 
-Role, robot state, sync state, brand config (Experiential, plus placeholder Educabot and FIRST Global), language, lesson step, device name, remembered students on this device, page links, and Reset demo. State lives in `localStorage` under `lx.demo1`.
+Role, robot state, sync state, brand config (Experiential, plus placeholder Educabot and FIRST Global), language, lesson panel (off/on), Code Buddy (off/on), lesson step, device name, remembered students on this device, page links, and Reset demo. State lives in `localStorage` under `lx.demo1`.
 
 Deep links seed state, for example: `home.html?lx={"role":"student","name":"Maya","robot":"ok"}`.
 
