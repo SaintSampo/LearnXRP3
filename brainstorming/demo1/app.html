@@ -12,6 +12,29 @@ body{height:100vh;overflow:hidden;zoom:1}
 #ribbon{zoom:var(--ui-zoom)}
 .coach{zoom:var(--ui-zoom)}
 .mid{flex:1;display:grid;grid-template-columns:calc(350px * var(--ui-zoom)) 1fr;min-height:0;gap:calc(16px * var(--ui-zoom));padding:calc(16px * var(--ui-zoom));height:calc(100vh - var(--ribbon-h) * var(--ui-zoom))}
+.mid.buddy{grid-template-columns:calc(350px * var(--ui-zoom)) 1fr calc(340px * var(--ui-zoom))}
+.mid.buddy.collapsed{grid-template-columns:calc(44px * var(--ui-zoom)) 1fr calc(340px * var(--ui-zoom))}
+.mid.buddy.hidebuddy{grid-template-columns:calc(350px * var(--ui-zoom)) 1fr}
+.mid.buddy.hidebuddy .bd{display:none}
+.bd{zoom:var(--ui-zoom);background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-sm);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.bd .hd{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--color-border)}
+.bd .bot{width:34px;height:34px;border-radius:12px;background:var(--color-accent-soft);display:grid;place-items:center;flex:none}
+.bd .bot svg{width:22px;height:22px}
+.bd .ctx{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:8px 14px;background:var(--color-bg);border-bottom:1px solid var(--color-border)}
+.bd .ctx .pill{cursor:pointer}
+.bd .ctx .pill.off{opacity:.45;text-decoration:line-through}
+.bd .log{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:0;justify-content:flex-end}
+.bd .msg{flex:none;width:fit-content;max-width:90%;min-width:55%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.5}
+.bd .msg.me{align-self:flex-end;background:var(--color-secondary);color:#fff;border-bottom-right-radius:4px}
+.bd .msg.ai{align-self:flex-start;background:var(--color-accent-soft);border-bottom-left-radius:4px}
+.bd .msg b{font-weight:600}
+.bd .msg .why{display:block;font-size:11px;color:var(--color-text-muted);margin-top:6px}
+.bd .quick{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 10px}
+.bd .quick button{font:600 11px var(--font-sans);border:1px solid var(--color-border);background:#fff;border-radius:999px;padding:4px 10px;cursor:pointer;color:var(--color-secondary)}
+.bd .in{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--color-border)}
+.bd .in input{flex:1;font:500 13px var(--font-sans);padding:9px 12px;border:1px solid var(--color-border);border-radius:999px;min-width:0}
+.bd .seen{font-size:11px;color:var(--color-text-muted);padding:8px 14px;background:var(--color-bg);display:flex;align-items:center;gap:6px}
+@media (max-width:900px){.mid.buddy,.mid.buddy.collapsed{grid-template-columns:1fr}}
 .mid.solo{grid-template-columns:1fr}
 .mid.solo .frame{width:100%;max-width:1500px;margin:0 auto}
 .mid.solo .coach{display:none}
@@ -79,6 +102,14 @@ function didIt(){done.add(step);LX.set({doneSteps:[...done]});renderCoach();LX.t
 function nextStep(){if(step<7){step++;LX.set({step});renderCoach();LX.toast('bridge: context {activity: '+L.id+'/step-'+step+'} sent to app')}}
 function goStep(n){step=n;LX.set({step});renderCoach()}
 if(app.lesson===false){document.getElementById('mid').classList.add('solo')}else{renderCoach()}renderFrame();
+/* Code Buddy sidekick (demo settings → Code Buddy → on). Canned Socratic replies; the real one gets the same context over the bridge. */
+const BUDDY_ON=S.buddy&&S.buddy!=='off'&&app.lesson!==false;
+function toggleBuddy(){const m=document.getElementById('mid');if(!m.classList.contains('buddy')){LX.toast('Code Buddy is off. Turn it on in demo settings (gear).');return}m.classList.toggle('hidebuddy')}
+const REPLIES=[[/answer/i,"I won't hand you the answer, but here is a smaller question: the shell printed <b>0.08</b> on the floor. Is that closer to 0 or to 1? Whatever it is, the tape will be the other one.","Rule: hints, not answers. Third time I offer a worked example on the rangefinder instead."],[/reflect/i,"Reflectance is how much light bounces back. White floor bounces a lot, black tape almost none. The sensor gives a number from 0 to 1. Which end do you think is black?","From the Reflectance docs page, which is in your context."],[/0\.08|print|shell/i,"0.08 is what the floor looks like to the sensor: bright, so a small number. Hold the robot over the tape and run again. What number do you expect?","I can see the last telemetry frame: reflectance_left = 0.08."],[/.*/,"Good question. Look at your program: what block from Sensors would give the print block something to say?","I can see the program on screen once the bridge exists; for now I only know the step."]];
+function renderBuddy(){if(!BUDDY_ON)return;const m=document.getElementById('mid');m.classList.add('buddy');const s=L.steps[step-1];m.insertAdjacentHTML('beforeend',`<aside class="bd" id="bd"><div class="hd"><span class="bot">${LX.BOT}</span><div><div style="font-weight:600">Code Buddy</div><div class="muted" style="font-size:11px">Step ${step} · your blocks · ${S.robot==='ok'?'XRP-3F2A':'no robot'}</div></div><span class="pill green" style="margin-inline-start:auto"><i></i>on</span></div><div class="ctx"><span class="muted" style="font-size:11px;align-self:center">Can see:</span><span class="pill blue" onclick="this.classList.toggle('off')">the step</span><span class="pill blue" onclick="this.classList.toggle('off')">my blocks</span><span class="pill blue" onclick="this.classList.toggle('off')">the robot</span></div><div class="log" id="bd-log"><div class="msg ai">Hi ${S.name||'there'}. You are on <b>step ${step}, ${s.t.toLowerCase()}</b>. ${step===3?'I can see your program has a print block but nothing inside it yet. What do you think goes in there?':'What have you tried so far?'}</div></div><div class="quick"><button onclick="askBuddy('What does reflectance mean?')">What does reflectance mean?</button><button onclick="askBuddy('Why does it print 0.08?')">Why does it print 0.08?</button><button onclick="askBuddy('Just tell me the answer')">Just tell me the answer</button></div><div class="in"><input id="bd-in" placeholder="Ask about your program, the robot, or the step" onkeydown="if(event.key==='Enter')askBuddy(this.value)"><button class="btn btn-primary sm" onclick="askBuddy(document.getElementById('bd-in').value)">Ask</button></div><div class="seen"><svg width="12" height="12" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="#22527B" stroke-width="1.6"/><circle cx="8" cy="8" r="2" fill="#22527B"/></svg>${S.teacher} can see this chat. Nothing here leaves the class.</div></aside>`)}
+function askBuddy(q){q=(q||'').trim();if(!q)return;const log=document.getElementById('bd-log');log.insertAdjacentHTML('beforeend',`<div class="msg me">${q.replace(/</g,'&lt;')}</div>`);document.getElementById('bd-in').value='';const r=REPLIES.find(x=>x[0].test(q));setTimeout(()=>{log.insertAdjacentHTML('beforeend',`<div class="msg ai">${r[1]}<span class="why">${r[2]}</span></div>`);log.scrollTop=1e4},600);log.scrollTop=1e4}
+renderBuddy();
+
 </script>
 </body>
 </html>

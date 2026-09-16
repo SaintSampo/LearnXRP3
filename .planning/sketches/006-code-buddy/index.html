@@ -101,11 +101,11 @@ h1,h2,h3{font-family:var(--font-display);margin:0;line-height:1.15;font-weight:6
 .chat .ctx{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;background:var(--color-bg);border-bottom:1px solid var(--color-border)}
 .chat .ctx .pill{cursor:pointer}
 .chat .ctx .pill.off{opacity:.45;text-decoration:line-through}
-.chat .log{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:260px;max-height:420px}
-.msg{width:fit-content;max-width:88%;min-width:60%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.5}
+.chat .log{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:220px;max-height:380px;justify-content:flex-end}
+.msg{flex:none;width:fit-content;max-width:88%;min-width:60%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.5}
 .msg.me{align-self:flex-end;background:var(--color-secondary);color:#fff;border-bottom-right-radius:4px}
-.msg.bot{align-self:flex-start;background:var(--color-accent-soft);border-bottom-left-radius:4px}
-.msg.bot b{font-weight:600}
+.msg.ai{align-self:flex-start;background:var(--color-accent-soft);border-bottom-left-radius:4px}
+.msg.ai b{font-weight:600}
 .msg .why{display:block;font-size:11px;color:var(--color-text-muted);margin-top:6px}
 .chat .in{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--color-border)}
 .chat .in input{flex:1;font:500 13px var(--font-sans);padding:9px 12px;border:1px solid var(--color-border);border-radius:999px}
@@ -184,10 +184,10 @@ h1,h2,h3{font-family:var(--font-display);margin:0;line-height:1.15;font-weight:6
   <div class="mid right">
     <div class="frame">XCODE<span class="frame-tag">iframe · xrpcode.wpi.edu</span></div>
     <div class="card chat" style="padding:0">
-      <div class="hd"><span class="bot">BOTSVG</span><div><div style="font-weight:600">Code Buddy</div><div class="muted" style="font-size:11px">Knows: step 3, your blocks, robot XRP-3F2A</div></div><span style="margin-inline-start:auto" class="pill green"><i></i>on</span></div>
-      <div class="ctx"><span class="pill blue" onclick="this.classList.toggle('off')">lesson step 3</span><span class="pill blue" onclick="this.classList.toggle('off')">my program</span><span class="pill blue" onclick="this.classList.toggle('off')">robot telemetry</span><span class="pill blue" onclick="this.classList.toggle('off')">docs: Reflectance</span></div>
+      <div class="hd"><span class="bot">BOTSVG</span><div><div style="font-weight:600">Code Buddy</div><div class="muted" style="font-size:11px">Step 3 · your blocks · XRP-3F2A</div></div><span style="margin-inline-start:auto" class="pill green"><i></i>on</span></div>
+      <div class="ctx"><span class="muted" style="font-size:11px;align-self:center">Can see:</span><span class="pill blue" onclick="this.classList.toggle('off')">the step</span><span class="pill blue" onclick="this.classList.toggle('off')">my blocks</span><span class="pill blue" onclick="this.classList.toggle('off')">the robot</span></div>
       <div class="log" id="log-a">
-        <div class="msg bot">Hi Maya. You are on <b>step 3, read the reflectance sensor</b>. I can see your program has a print block but nothing inside it yet. What do you think goes in there?</div>
+        <div class="msg ai">Hi Maya. You are on <b>step 3, read the reflectance sensor</b>. I can see your program has a print block but nothing inside it yet. What do you think goes in there?</div>
       </div>
       <div class="quick"><button onclick="askA('What does reflectance mean?')">What does reflectance mean?</button><button onclick="askA('Why does it print 0.08?')">Why does it print 0.08?</button><button onclick="askA('Just tell me the answer')">Just tell me the answer</button></div>
       <div class="in"><input id="in-a" placeholder="Ask about your program, the robot, or the step" onkeydown="if(event.key==='Enter')askA(this.value)"><button class="btn btn-primary sm" onclick="askA(document.getElementById('in-a').value)">Ask</button></div>
@@ -338,7 +338,7 @@ document.body.innerHTML=document.body.innerHTML
 
 /* A: sidekick chat */
 const REPLIES=[[/answer/i,"I won't hand you the answer, but here is a smaller question: the shell printed <b>0.08</b> on the floor. Is that closer to 0 or to 1? Whatever it is, the tape will be the other one.","Rule: hints, not answers. Third time I offer a worked example on the rangefinder instead."],[/reflect/i,"Reflectance is how much light bounces back. White floor bounces a lot, black tape almost none. The sensor gives a number from 0 to 1. Which end do you think is black?","Pulled from the Reflectance docs page, which is open in your context."],[/0\.08|print/i,"0.08 is what the floor looks like to the sensor: bright, so a small number. Try holding the robot over the tape and run again. What number do you expect?","I can see the last telemetry frame: reflectance_left = 0.08."],[/.*/,"Good question. Look at your program: the print block is empty right now. What block from Sensors would give it something to say?","I can see your program has no block inside print."]];
-function askA(q){q=(q||'').trim();if(!q)return;const log=document.getElementById('log-a');log.insertAdjacentHTML('beforeend',`<div class="msg me">${q}</div>`);document.getElementById('in-a').value='';const r=REPLIES.find(x=>x[0].test(q));setTimeout(()=>{log.insertAdjacentHTML('beforeend',`<div class="msg bot">${r[1]}<span class="why">${r[2]}</span></div>`);log.scrollTop=1e4},600);log.scrollTop=1e4}
+function askA(q){q=(q||'').trim();if(!q)return;const log=document.getElementById('log-a');log.insertAdjacentHTML('beforeend',`<div class="msg me">${q}</div>`);document.getElementById('in-a').value='';const r=REPLIES.find(x=>x[0].test(q));setTimeout(()=>{log.insertAdjacentHTML('beforeend',`<div class="msg ai">${r[1]}<span class="why">${r[2]}</span></div>`);log.scrollTop=1e4},600);log.scrollTop=1e4}
 
 /* B: cloudflare agent timeline */
 function evB(cls,ic,title,body,t){const tl=document.getElementById('tl-b');tl.querySelectorAll('.ev.now').forEach(e=>e.classList.remove('now'));tl.insertAdjacentHTML('beforeend',`<div class="ev now ${cls}"><i>${ic}</i><div><b style="font-weight:600">${title}</b><div>${body}</div><div class="t">${t}</div></div></div>`);tl.scrollTop=1e4}

@@ -2,7 +2,7 @@
    Plain JS, no build. Everything lives in localStorage under one key. */
 (function(){
 const KEY='lx.demo1';
-const DEF={lang:'en',brand:'experiential',robot:'none',sync:'local',role:'guest',name:null,tag:null,classCode:null,className:'Period 3 Robotics',teacher:'Ms. Rivera',remembered:[],step:3,device:'Chromebook 04',roomOpen:false,autoAdmit:true,roster:[],doneSteps:[1,2]};
+const DEF={lang:'en',brand:'experiential',robot:'none',sync:'local',role:'guest',name:null,tag:null,classCode:null,className:'Period 3 Robotics',teacher:'Ms. Rivera',remembered:[],step:3,device:'Chromebook 04',roomOpen:false,autoAdmit:true,roster:[],doneSteps:[1,2],buddy:'off'};
 function load(){try{return Object.assign({},DEF,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){return Object.assign({},DEF)}}
 const S=load();
 /* deep link: ?lx={"role":"student","name":"Maya"} seeds state (demo affordance) */
@@ -129,6 +129,7 @@ function ringSvg(done,total){const c=151,off=Math.round(c-c*done/total);return `
 function initials(n){return (n||'?').split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase()}
 
 /* ---------- ribbon A ---------- */
+const BOT=`<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="10" width="28" height="22" rx="8" fill="#22527B"/><circle cx="16" cy="21" r="3.5" fill="#fff"/><circle cx="24" cy="21" r="3.5" fill="#fff"/><circle cx="16.8" cy="21.6" r="1.6" fill="#0A6EFF"/><circle cx="24.8" cy="21.6" r="1.6" fill="#0A6EFF"/><rect x="18" y="4" width="4" height="6" rx="2" fill="#D1182C"/><path d="M14 27q6 3 12 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
 function robotChip(){const s=S.robot;const m={none:['',t('robotNone'),.4],q:['warn q',t('robotQ')],ok:['ok',t('robotOk')],low:['warn',t('robotLow')],lost:['bad',t('robotLost')]}[s]||['',t('robotNone')];return `<button class="chip ${m[0]}" title="Demo: click to cycle robot state" onclick="LX.cycleRobot()"><i${m[2]?' style="opacity:.4"':''}></i>${m[1]}</button>`}
 function cycleRobot(){const o=['none','q','ok','low','lost'];set({robot:o[(o.indexOf(S.robot)+1)%o.length]});ribbon(LX._opts)}
 function syncDot(){const cls=S.sync==='local'?'local':S.sync==='off'?'off':'';const lbl=S.sync==='local'?t('syncLocal'):S.sync==='off'?t('syncOff'):t('syncSynced');return `<span class="sync ${cls}" title="${lbl}" onclick="LX.toast('${lbl.replace(/'/g,'’')}')"></span>`}
@@ -138,7 +139,8 @@ function ribbon(opts){opts=opts||{};LX._opts=opts;const b=brand();const el=docum
  const right=S.role==='teacher'?`<span class="chip ${S.roomOpen?'ok':''}"><i></i>${S.roomOpen?t('studentsIn',{n:(S.roster||[]).length}):t('roomClosed')}</span>`:robotChip();
  const langSel=`<select class="lang" title="Language" onchange="LX.setLang(this.value)"><option value="en"${S.lang==='en'?' selected':''}>EN</option><option value="es"${S.lang==='es'?' selected':''}>ES</option><option value="ar"${S.lang==='ar'?' selected':''}>AR</option></select>`;
  const gear=`<button class="gear" title="${t('settings')}" onclick="LX.menu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button>`;
- el.innerHTML=(b.motif?'<span class="motif"></span>':'')+brandEl+`<span class="crumb">${opts.crumb||''}</span><span class="sp"></span>`+right+syncDot()+langSel+me()+gear;
+ const buddy=S.buddy&&S.buddy!=='off'?`<button class="chip buddy" title="Code Buddy" onclick="if(window.toggleBuddy)toggleBuddy();else LX.toast('Code Buddy opens beside an app. Open Blocks Lab.')"><span class="bi">${BOT}</span>Code Buddy</button>`:'';
+ el.innerHTML=(b.motif?'<span class="motif"></span>':'')+brandEl+`<span class="crumb">${opts.crumb||''}</span><span class="sp"></span>`+buddy+right+syncDot()+langSel+me()+gear;
  if(!document.getElementById('lx-menu')){const m=document.createElement('div');m.id='lx-menu';m.className='lx-menu';document.body.appendChild(m);document.addEventListener('click',e=>{if(!m.contains(e.target)&&!e.target.closest('.gear'))m.classList.remove('open')})}}
 function setLang(l){set({lang:l});location.reload()}
 function menu(){const m=document.getElementById('lx-menu');if(m.classList.contains('open')){m.classList.remove('open');return}
@@ -149,6 +151,7 @@ function menu(){const m=document.getElementById('lx-menu');if(m.classList.contai
  <label>Sync<select onchange="LX.set({sync:this.value});LX.ribbon(LX._opts)">${opt([['local','local only (no class)'],['synced','synced to class'],['off','offline, queued']],S.sync)}</select></label>
  <label>Brand config<select onchange="LX.set({brand:this.value});location.reload()">${opt([['experiential','Experiential (default)'],['educabot','Educabot (example)'],['firstglobal','FIRST Global (example)']],S.brand)}</select></label>
  <label>Language<select onchange="LX.setLang(this.value)">${opt([['en','English'],['es','Español'],['ar','العربية (RTL)']],S.lang)}</select></label>
+ <label>Code Buddy<select onchange="LX.set({buddy:this.value});location.reload()">${opt([['off','off (default for under 13)'],['sidekick','on · sidekick chat']],S.buddy||'off')}</select></label>
  <label>Lesson step<select onchange="LX.set({step:+this.value,doneSteps:Array.from({length:+this.value-1},(_,i)=>i+1)});location.reload()">${opt([1,2,3,4,5,6,7].map(n=>[String(n),'step '+n+' of 7']),String(S.step))}</select></label>
  <label>Device name<input type="text" value="${S.device}" onchange="LX.set({device:this.value})"></label>
  <div class="sec">Remembered on this device</div>
@@ -163,5 +166,5 @@ function menu(){const m=document.getElementById('lx-menu');if(m.classList.contai
 /* ---------- boot ---------- */
 document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';
 document.addEventListener('DOMContentLoaded',()=>{i18n();document.querySelectorAll('[data-footer]').forEach(f=>{f.innerHTML=`<div><b>Experiential Robotics</b> · ${t('footer1')}</div><div>${t('footer2')}</div>`})});
-window.LX={S,set,reset,t,i18n,brand,BRANDS,LESSON,APPS,THUMBS,newTag,toast,emit,on,ringSvg,initials,ribbon,cycleRobot,setLang,menu,XMARK};
+window.LX={S,set,reset,t,i18n,brand,BRANDS,LESSON,APPS,THUMBS,newTag,toast,emit,on,ringSvg,initials,ribbon,cycleRobot,setLang,menu,XMARK,BOT};
 })();
