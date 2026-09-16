@@ -27,3 +27,4 @@ Jacob then asked to remove printed login cards entirely and proposed that a stud
 | 004 | ribbon | What is the one bar every app inherits, and how does it behave inside a third-party app with its own navbar? | — | component, ribbon, shell, brand, i18n, robot-state |
 | 005 | login | One entry page for six kinds of people, never asking an under-13 student for an email or birthday | F | login, onboarding, coppa, student, teacher, parent, camp |
 | 006 | code-buddy | What shape should AI take: chat, persistent Cloudflare agent, notes on blocks, hardware pit crew, or teacher-only copilot? | — | ai, code-buddy, cloudflare, classroom, guardrails |
+| 007 | compete | How should a classroom competition module organize teams, schedule, rankings and the FMS? | — | module, compete, fms, teacher, schedule, rankings |
