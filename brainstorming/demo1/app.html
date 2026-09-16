@@ -8,9 +8,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/theme.css">
 <style>
-body{height:100vh;overflow:hidden}
-.mid{flex:1;display:grid;grid-template-columns:350px 1fr;min-height:0;gap:16px;padding:16px;height:calc(100vh - var(--ribbon-h))}
-.mid.collapsed{grid-template-columns:44px 1fr}
+body{height:100vh;overflow:hidden;zoom:1}
+#ribbon{zoom:var(--ui-zoom)}
+.coach{zoom:var(--ui-zoom)}
+.mid{flex:1;display:grid;grid-template-columns:calc(350px * var(--ui-zoom)) 1fr;min-height:0;gap:calc(16px * var(--ui-zoom));padding:calc(16px * var(--ui-zoom));height:calc(100vh - var(--ribbon-h) * var(--ui-zoom))}
+.mid.solo{grid-template-columns:1fr}
+.mid.solo .frame{width:100%;max-width:1500px;margin:0 auto}
+.mid.solo .coach{display:none}
+.mid.collapsed{grid-template-columns:calc(44px * var(--ui-zoom)) 1fr}
 .coach{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto}
 .mid.collapsed .coach > *:not(.tog){display:none}
 .tile{background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-sm);padding:16px}
@@ -35,7 +40,7 @@ body{height:100vh;overflow:hidden}
 .bridge .dot{width:8px;height:8px;border-radius:50%;background:var(--color-success);display:inline-block;margin-inline-end:6px;vertical-align:middle}
 .frame{background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-md);overflow:hidden;position:relative;min-height:0;display:flex}
 .frame iframe{border:0;width:100%;height:100%;flex:1;background:#fff}
-.frame-tag{position:absolute;bottom:8px;inset-inline-end:8px;font:11px var(--font-mono);background:rgba(28,34,48,.85);color:#fff;padding:3px 8px;border-radius:4px;pointer-events:none}
+.frame-tag{position:absolute;bottom:8px;inset-inline-end:8px;zoom:var(--ui-zoom);font:11px var(--font-mono);background:rgba(28,34,48,.85);color:#fff;padding:3px 8px;border-radius:4px;pointer-events:none}
 .ph{flex:1;display:grid;place-items:center;background:repeating-linear-gradient(135deg,#f3f4f6 0 8px,#e9ebef 8px 16px);text-align:center;padding:24px}
 .ph .thumb{width:min(520px,90%);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-md);margin:0 auto 16px}
 .ph .thumb svg{width:100%;display:block}
@@ -73,7 +78,7 @@ function toggleHint(b){const h=document.getElementById('hint');h.classList.toggl
 function didIt(){done.add(step);LX.set({doneSteps:[...done]});renderCoach();LX.toast('bridge: progress {step '+step+', done}')}
 function nextStep(){if(step<7){step++;LX.set({step});renderCoach();LX.toast('bridge: context {activity: '+L.id+'/step-'+step+'} sent to app')}}
 function goStep(n){step=n;LX.set({step});renderCoach()}
-renderCoach();renderFrame();
+if(app.lesson===false){document.getElementById('mid').classList.add('solo')}else{renderCoach()}renderFrame();
 </script>
 </body>
 </html>

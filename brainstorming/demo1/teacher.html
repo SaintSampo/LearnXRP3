@@ -47,6 +47,16 @@
 .li .st i.amber{background:var(--amber)}
 .li .rb{font-family:var(--font-mono);font-size:12px;color:var(--color-text-muted)}
 .li.new{background:#F3FBF6}
+.backup{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0 0}
+.backup .card h3{font-size:16px;margin:4px 0 8px}
+.backup .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:14px}
+.backup .prov{display:inline-flex;align-items:center;gap:8px;font-weight:600}
+.backup .prov svg{width:18px;height:18px}
+.backup .meta{font-size:12px;color:var(--color-text-muted);margin-top:6px}
+.backup select{font:500 13px var(--font-sans);padding:6px 10px;border:1px solid var(--color-border);border-radius:999px;background:#fff;color:var(--color-text)}
+.backup ul{margin:6px 0 0;padding-inline-start:18px;font-size:13px;color:var(--color-text-muted)}
+.backup li{margin-bottom:3px}
+@media (max-width:900px){.backup{grid-template-columns:1fr}}
 .foot2{display:flex;gap:8px;align-items:center;margin-top:16px;flex-wrap:wrap;font-size:13px;color:var(--color-text-muted)}
 .foot2 .sp{flex:1}
 .how{margin-top:16px;background:var(--color-secondary-soft);border-radius:var(--radius-md);padding:16px 24px;font-size:13px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -76,6 +86,19 @@
       <div id="queue" style="display:flex;flex-direction:column;gap:6px"></div>
       <div class="empty" id="qempty" data-i18n="nobodyYet"></div>
       <div class="auto"><span data-i18n="autoAdmit"></span><label class="switch" id="autosw" onclick="toggleAuto()"><i></i></label></div>
+    </div>
+  </div>
+  <div class="backup">
+    <div class="card">
+      <span class="eyebrow" data-i18n="backupsEyebrow">Backups</span>
+      <h3 data-i18n="backupsTitle">Your class, in your Drive</h3>
+      <div class="row"><span class="prov" id="bk-prov"></span><select id="bk-sel" onchange="setProvider(this.value)"><option value="gdrive">Google Drive</option><option value="onedrive">OneDrive</option><option value="local">This device only</option></select></div>
+      <div class="meta" id="bk-meta"></div>
+      <div class="row" style="margin-top:12px"><button class="btn btn-primary sm" onclick="backupNow()" data-i18n="backupNow">Back up now</button><button class="btn btn-out sm" onclick="downloadBackup()" data-i18n="downloadBackup">Download a copy</button></div>
+    </div>
+    <div class="card" style="background:var(--color-secondary-soft);box-shadow:none">
+      <span class="eyebrow" data-i18n="whatsInside">What is in the backup</span>
+      <ul><li data-i18n="bk1">The name-to-tag map for this class. Only you can read it.</li><li data-i18n="bk2">Each student's progress and saved programs, by tag.</li><li data-i18n="bk3">Nothing goes to LearnXRP's server. Google or Microsoft holds the file under your school account, the same way XRPCode already saves to Drive.</li><li data-i18n="bk4">On a new laptop, sign in and the class comes back. On a new Chromebook, a student types the code and their name and their work comes back.</li></ul>
     </div>
   </div>
   <div class="list" id="list"></div>
@@ -114,6 +137,14 @@ function admit(p,auto){const i=roster.length;roster.push({n:p.n,d:p.d,tag:LX.new
 function renderList(){const l=document.getElementById('list');l.innerHTML=`<div class="li hd"><span>${t('student')}</span><span>${t('progressCol')}</span><span>${t('rightNow')}</span><span>${t('robotCol')}</span></div>`+(roster.length?roster.map(r=>`<div class="li ${r.fresh?'new':''}"><span class="nm">${r.n}<small>${r.tag} · ${r.d}</small></span><span class="p"><span class="bar"><i style="width:${Math.round(r.step/7*100)}%"></i></span>${t('stepOf',{s:r.step})}</span><span class="st"><i class="${r.min?'amber':''}"></i>${r.min?t('quiet',{m:r.min,a:r.app}):t('working',{a:r.app})}</span><span class="rb">${r.robot||'—'}</span></div>`).join(''):`<div class="li" style="color:var(--color-text-muted);grid-template-columns:1fr">${t('appear')}</div>`);document.getElementById('sum').textContent=t('inRoom',{n:roster.length});setTimeout(()=>{roster.forEach(r=>r.fresh=false);l.querySelectorAll('.li.new').forEach(e=>e.classList.remove('new'))},1500)}
 function simulate(){if(!S.roomOpen){LX.toast(t('roomClosedMsg'));return}let i=0;const f=setInterval(()=>{if(i>=SIMS.length){clearInterval(f);return}arrive(SIMS[i++])},1500)}
 paintRoom();renderQ();renderList();
+/* backups: provider + last backup time live in state; Download writes a real JSON file */
+const PROV={gdrive:{n:'Google Drive',acct:'ms.rivera@school.org',ic:'<svg viewBox="0 0 24 24"><path d="M8.6 3h6.8l6.1 10.5-3.4 5.9z" fill="#FBBC04"/><path d="M2.5 13.5L8.6 3l3.4 5.9-6.1 10.5z" fill="#34A853"/><path d="M5.9 19.4l3.4-5.9h12.2l-3.4 5.9z" fill="#4285F4"/></svg>'},onedrive:{n:'OneDrive',acct:'ms.rivera@school.org',ic:'<svg viewBox="0 0 24 24"><path d="M6 17h12a3.5 3.5 0 00.5-7A5 5 0 009 8.5 4 4 0 006 17z" fill="#0364B8"/></svg>'},local:{n:'This device only',acct:'',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#22527B" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/></svg>'}};
+function paintBackup(){const k=S.backupProvider||'gdrive';const p=PROV[k];document.getElementById('bk-sel').value=k;document.getElementById('bk-prov').innerHTML=p.ic+p.n+(p.acct?' <span class="muted" style="font-weight:400">· '+p.acct+'</span>':'');const when=S.lastBackup?new Date(S.lastBackup):null;const ago=when?Math.max(0,Math.round((Date.now()-when)/60000)):null;document.getElementById('bk-meta').textContent=k==='local'?'Not backed up. Clearing this browser loses the class. Download a copy or pick a provider.':(ago===null?'Never backed up yet. Backs up automatically after every change once connected.':'Last backup '+(ago===0?'just now':ago+' min ago')+' · '+roster.length+' students · LearnXRP/'+S.className+'.json')}
+function setProvider(k){LX.set({backupProvider:k});if(k!=='local'){LX.toast('Demo: a real deploy asks for the '+PROV[k].n+' file scope here (only files this app creates).');LX.set({lastBackup:Date.now()})}paintBackup()}
+function backupNow(){if((S.backupProvider||'gdrive')==='local'){LX.toast('Pick Google Drive or OneDrive first, or download a copy.');return}const m=document.getElementById('bk-meta');m.textContent='Backing up…';setTimeout(()=>{LX.set({lastBackup:Date.now()});paintBackup();LX.toast('Backed up to '+PROV[S.backupProvider||'gdrive'].n)},900)}
+function downloadBackup(){const data={class:S.className,code:CODE,exported:new Date().toISOString(),students:roster.map(r=>({name:r.n,tag:r.tag,device:r.d,step:r.step,robot:r.robot}))};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(S.className||'class').replace(/\s+/g,'_')+'.learnxrp.json';document.body.appendChild(a);a.click();a.remove();LX.toast('Downloaded. Names are in this file, so keep it where you keep grades.')}
+const _renderList=renderList;renderList=function(){_renderList();paintBackup()};
+paintBackup();
 </script>
 </body>
 </html>

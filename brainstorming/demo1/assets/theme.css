@@ -13,10 +13,12 @@
 }
 /* Scale the whole UI on wide screens so a 1280px design does not float in a 2500px window.
    Chrome/Edge honor zoom; iframes keep their own scale. */
-@media (min-width:1600px){html{zoom:1.12}}
-@media (min-width:1900px){html{zoom:1.25}}
-@media (min-width:2300px){html{zoom:1.4}}
-@media (min-width:3000px){html{zoom:1.7}}
+:root{--ui-zoom:1}
+@media (min-width:1600px){:root{--ui-zoom:1.12}}
+@media (min-width:1900px){:root{--ui-zoom:1.25}}
+@media (min-width:2300px){:root{--ui-zoom:1.4}}
+@media (min-width:3000px){:root{--ui-zoom:1.7}}
+body{zoom:var(--ui-zoom)}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
 body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);font-size:15px;line-height:1.45;display:flex;flex-direction:column;min-height:100vh}
