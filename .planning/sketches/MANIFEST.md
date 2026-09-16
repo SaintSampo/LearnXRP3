@@ -10,6 +10,8 @@ A fourth variant, **Experiential site**, was added to every sketch on Jacob's re
 
 A fifth variant, **Experiential, playful**, extends the site brand with playful but professional elements: rounder shapes, pill buttons, the X-mark diagonal as a recurring motif, progress rings, puzzle-knob app cards, and the logo's bright blue as a second accent.
 
+Jacob liked the playful Experiential aesthetic and asked for two revisions per screen on it, each leaning a notch more "classroom tool": student home cards must say where they go (F: cards with destination screenshots, G: list plus preview with "when you press Open"); the running app must show the real look of the apps in the frame (F: XRPCode Blocks as on xrpcode.wpi.edu, G: XRPCode Python plus its Dashboard); the teacher view must put less pressure on teachers and drop the picture-password shapes (F: calm list in words, G: one assignment, three groups).
+
 ## Themes
 `themes/default.css` carries all five palettes scoped as `.theme-playful`, `.theme-clean`, `.theme-classroom`, `.theme-experiential`, `.theme-experiential-play`. The sketch toolbar can force one theme onto every variant.
 

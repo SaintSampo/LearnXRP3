@@ -20,6 +20,8 @@ open .planning/sketches/003-teacher-class/index.html
 - **C: Classroom assignments** — tabs for Assignments, Roster and Settings; a "live now" strip of 12 dots; each assignment expands to a per-tag table; settings show the age band, app allowlist and the COPPA authorization attestation.
 - **D: Experiential site** — site-brand chrome: blue navbar, a red class-code band like the site's red sections, four stat cards on grey, a striped Bootstrap-style roster table with progress bars, dark footer.
 - **E: Experiential, playful** — navy-to-blue gradient class-code hero with a red slash, stat tiles with colored dots, then student cards with a colored top stripe (blue working, red stuck, grey away), brand-colored avatars and progress rings. Heading reads "Who needs you right now".
+- **F: Calm class list** — no shapes, no stat tiles, no red. One sentence sums up the room, then a plain list: student, progress, "right now" in words (working in Blocks Lab, quiet for 14 min, not here today), robot. Class code sits in a quiet pill. Login cards replace picture passwords.
+- **G: One thing at a time** — the open assignment as a single card with one segmented bar and three groups in words: Ahead, On track, Might want a hand. Below it, "Next up" with what to bring and read, and a small Class card. Nothing to configure on this screen.
 
 ## What to Look For
 - "Put it on the board" opens a projector-sized code screen in every variant. Is the join URL clear enough for a nine-year-old?
