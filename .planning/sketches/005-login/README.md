@@ -2,7 +2,7 @@
 sketch: 005
 name: login
 question: "One entry page for six kinds of people: how do we get an under-13 student into class in seconds without ever asking for an email, while teachers, parents, camp leaders and home explorers still find their door?"
-winner: null
+winner: "F"
 tags: [login, onboarding, coppa, student, teacher, parent, camp]
 ---
 

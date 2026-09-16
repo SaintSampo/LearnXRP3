@@ -10,6 +10,15 @@
 <style>
 .wrap{padding:32px;flex:1;width:100%;max-width:1344px;margin:0 auto;display:flex;flex-direction:column;justify-content:center}
 .wrap.state{display:none}.wrap.state.on{display:flex}
+.rolebar{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;margin-bottom:10px}
+.rolebar .lab{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em}
+.rolebar .lab b{font-size:15px;letter-spacing:0;text-transform:none;color:var(--color-text);background:#fff;border-radius:999px;padding:6px 14px;box-shadow:var(--shadow-sm)}
+.rolebar .lab.kid b{background:var(--color-secondary);color:#fff}
+.big .alt{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.25)}
+.big .alt .btn{background:#fff;color:var(--color-text);border-color:#fff;width:100%}
+.big .alt .lead{font-size:12px;color:rgba(255,255,255,.85);margin-bottom:8px}
+.big .alt .help{color:rgba(255,255,255,.85);margin-top:8px;font-size:12px}
+.big .alt .help b{font-weight:600;color:#fff}
 .doors{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:stretch}
 .big,.door{display:flex;flex-direction:column}
 .door .demo-cta{margin-top:auto}
@@ -47,7 +56,7 @@
 .person.add{border:2px dashed var(--color-border);background:transparent;box-shadow:none;justify-content:center;color:var(--color-secondary);font-weight:600}
 .device{font-size:12px;color:var(--color-text-muted);display:flex;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap}
 .device a{font-weight:600;cursor:pointer}
-@media (max-width:900px){.doors,.wb{grid-template-columns:1fr}.wrap{padding:16px}.big{padding:28px 20px}.big h1{font-size:28px}}
+@media (max-width:900px){.doors,.wb,.rolebar{grid-template-columns:1fr}.wrap{padding:16px}.big{padding:28px 20px}.big h1{font-size:28px}}
 </style>
 </head>
 <body>
@@ -55,15 +64,21 @@
 
 <!-- ===== LOGIN: two doors (A) with the code-first card (C) ===== -->
 <main class="wrap state" id="v-login">
+  <div class="rolebar"><div class="lab kid"><b data-i18n="students">Students</b><span data-i18n="studentsSub">in a class, a camp or at home</span></div><div class="lab"><b data-i18n="adults">Adults</b><span data-i18n="adultsSub">teachers · mentors · educators</span></div></div>
   <div class="doors">
     <section class="big">
-      <span class="eyebrow">XLOGO learnxrp.org/join</span>
+      <span class="eyebrow">XLOGO <span data-i18n="students">Students</span></span>
       <h1 data-i18n="joinTitle">Type the code on the board</h1>
       <p data-i18n="joinSub">Then your first name. Your teacher lets you in. Nothing to remember.</p>
       <div class="state on" id="s1">
         <input class="in code" id="code" placeholder="XRP-____" maxlength="8" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
         <input class="in name" id="name" data-i18n-ph="nameLabel" placeholder="Your first name" autocomplete="off">
         <button class="btn btn-primary" onclick="join()" data-i18n="join">Join</button>
+        <div class="alt">
+          <div class="lead" data-i18n="ssoLead">Or, if your school gave you a Google account:</div>
+          <button class="btn" onclick="ssoStudent()">GICON <span data-i18n="ssoBtn">Sign in with school Google</span></button>
+          <div class="help" data-i18n="ssoHelp" data-i18n-html>...</div>
+        </div>
         <div class="note"><svg width="14" height="14" viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="7" rx="2" fill="#fff"/><path d="M5 7V5a3 3 0 016 0v2" fill="none" stroke="#fff" stroke-width="1.6"/></svg><span data-i18n="privacyNote">Your name goes only to your teacher's computer. LearnXRP never stores it.</span></div>
       </div>
       <div class="state center" id="s2"><span class="spin" style="border-color:rgba(255,255,255,.3);border-top-color:#fff"></span><h2 style="margin:12px 0 4px;font-size:24px" id="wait-title"></h2><div style="opacity:.9" id="wait-sub"></div></div>
@@ -71,19 +86,19 @@
       <div class="state center" id="s4"><h2 style="margin:0 0 4px;font-size:24px">Hmm</h2><div style="opacity:.9;margin-bottom:14px" data-i18n="notLetIn"></div><button class="btn" style="color:var(--color-secondary)" onclick="show('s1')">Try again</button></div>
     </section>
     <section class="card door">
-      <span class="eyebrow">XMARK <span data-i18n="eduEyebrow">Teachers, mentors, parents</span></span>
+      <span class="eyebrow">XMARK <span data-i18n="eduEyebrow">Adults · teachers, mentors, educators</span></span>
       <h2 data-i18n="eduTitle">Sign in</h2>
-      <p data-i18n="eduSub">Run a class, a club, a camp or a family. Students never need this side.</p>
+      <p data-i18n="eduSub">Run a class, a club or a camp. Students never need this side.</p>
       <div class="sso"><button class="btn" onclick="LX.toast('Google sign-in opens in a popup. School accounts work.')">GICON <span data-i18n="google">Google</span></button><button class="btn" onclick="LX.toast('Microsoft sign-in opens in a popup.')">MICON <span data-i18n="microsoft">Microsoft</span></button></div>
       <div class="or">or</div>
       <div class="field"><label class="lbl" for="email" data-i18n="emailLabel">Work or personal email</label><input class="in" id="email" placeholder="you@school.org" type="email"></div>
       <button class="btn btn-out block" onclick="emailLink()" data-i18n="emailLink">Email me a sign-in link</button>
       <div class="help" data-i18n="noPw">No password to remember. The link works once and expires in 15 minutes.</div>
-      <div class="demo-cta"><div class="or">demo</div>
+      <div class="demo-cta"><div class="or" data-i18n="notSure">not sure which side?</div><div class="help" style="margin:0 0 12px" data-i18n="sideHelp">Students always use the blue side, even with a Google account. Adults never type a class code.</div><div class="or">demo</div>
       <button class="btn btn-primary block" onclick="demoTeacher()" data-i18n="demoTeacher">Demo: sign in as Ms. Rivera</button></div>
     </section>
   </div>
-  <div class="explore"><div><b style="font-weight:600" data-i18n="exploreTitle">Just exploring, or playing at home?</b> <span class="muted" data-i18n="exploreSub">No account needed. Your work stays on this computer. A parent can add a family class later to see progress.</span></div><button class="btn btn-out" onclick="explore()" data-i18n="startNoAccount">Start without an account</button></div>
+  <div class="explore"><div><b style="font-weight:600" data-i18n="exploreTitle">Just exploring, or playing at home?</b> <span class="muted" data-i18n="exploreSub">No account needed. Your work stays on this computer.</span></div><button class="btn btn-out" onclick="explore()" data-i18n="startNoAccount">Start without an account</button></div>
 </main>
 
 <!-- ===== WELCOME BACK (E): shown when this device remembers students ===== -->
@@ -129,6 +144,7 @@ function requestJoin(name,known,onAdmit,onDeny){pending={name,known,onAdmit,onDe
 LX.on('lx.admit',m=>{if(pending&&m.name===pending.name){clearTimeout(pending.timer);finishAdmit(m.name,false)}});
 LX.on('lx.deny',m=>{if(pending&&m.name===pending.name){clearTimeout(pending.timer);const p=pending;pending=null;p.onDeny&&p.onDeny()}});
 function finishAdmit(name,auto){const p=pending;pending=null;const rem=(S.remembered||[]).filter(r=>r.name!==name);rem.unshift({name,last:'today',step:S.step});LX.set({role:'student',name,tag:S.tag||LX.newTag(),classCode:S.classCode||'XRP-7K2Q',sync:'synced',remembered:rem});if(auto)LX.toast(t('demoAdmit'));p&&p.onAdmit&&p.onAdmit()}
+function ssoStudent(){const name='Maya';document.getElementById('wait-title').textContent=t('ssoWait');document.getElementById('wait-sub').textContent=t('ssoWaitSub');show('s2');LX.set({classCode:S.classCode||'XRP-7K2Q'});setTimeout(()=>{requestJoin(name,true,()=>{document.getElementById('in-title').textContent=t('inTitle',{n:name});document.getElementById('in-sub').textContent=t('ssoInSub',{c:S.className});show('s3')},()=>show('s4'))},1200)}
 function join(){const c=document.getElementById('code'),n=document.getElementById('name');if(!CODE.test(c.value)){c.classList.add('bad');LX.toast(t('badCode'));setTimeout(()=>c.classList.remove('bad'),1500);return}if(!n.value.trim()){n.classList.add('bad');n.focus();return}const name=n.value.trim();LX.set({classCode:c.value});document.getElementById('wait-title').textContent=t('waitTitle',{n:name});document.getElementById('wait-sub').textContent=t('waitSub',{t:S.teacher});show('s2');requestJoin(name,false,()=>{document.getElementById('in-title').textContent=t('inTitle',{n:name});document.getElementById('in-sub').textContent=t('inSub',{c:S.className,s:S.step});show('s3')},()=>show('s4'))}
 function back(name){const s=document.getElementById('wb-state');s.style.display='block';s.innerHTML=`<div style="display:flex;align-items:center;gap:14px"><span class="spin"></span><div><b style="font-weight:600">${t('waitTitle',{n:name})}</b><div class="muted" style="font-size:13px">${t('waitSub',{t:S.teacher})}</div></div></div>`;requestJoin(name,true,()=>{s.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap"><div><b style="font-weight:600">${t('inTitle',{n:name})}</b><div class="muted" style="font-size:13px">${t('inSub',{c:S.className,s:S.step})}</div></div><a class="btn btn-primary" href="home.html">${t('letsGo')}</a></div>`},()=>{s.innerHTML=`<b style="font-weight:600">${t('notLetIn')}</b>`})}
 function wbCode(){const c=document.getElementById('wb-code');if(!CODE.test(c.value)){c.classList.add('bad');LX.toast(t('badCode'));return}LX.set({classCode:c.value});view('login');document.getElementById('code').value=c.value;document.getElementById('name').focus()}

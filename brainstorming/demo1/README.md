@@ -8,7 +8,7 @@ Live: https://saintsampo.github.io/LearnXRP3/ (deployed from this folder by `.gi
 
 | page | from sketch | what it does |
 |---|---|---|
-| `index.html` | Login A (two doors) with the code-first card from Login C; Welcome back from Login E | Students type a code and a first name and wait for the teacher. Educators sign in. Explorers skip accounts. When this device remembers students, the Welcome back view shows first. |
+| `index.html` | Login F (two doors, two ways in: code-and-name plus school Google for students, role bar above the doors); Welcome back from Login E | Students type a code and a first name and wait for the teacher. Educators sign in. Explorers skip accounts. When this device remembers students, the Welcome back view shows first. |
 | `home.html` | Student home F | Module cards that say where they open, what you do there, and what you need. The Today strip appears when the lesson panel is on. |
 | `module.html?module=…` | Running app G, Ribbon A | A module is anything that opens in the frame. `xrpcode` loads https://xrpcode.wpi.edu/ with `allow="bluetooth; serial; usb"`. `docs` loads https://introtoroboticsv2.readthedocs.io/, `curriculum` loads https://wp.wpi.edu/xrp/curriculum/, `orbit` loads https://www.experiential.bot/orbitodyssey. Others are placeholders. The lesson panel and Code Buddy are layers the shell can add beside any module; both are off by default and switched on in demo settings. `app.html` redirects for old links. |
 | `teacher.html` | Teacher view H | Teacher hosts the room. Start class, names arrive in the queue, Let in. |
