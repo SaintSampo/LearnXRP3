@@ -18,6 +18,7 @@ open .planning/sketches/003-teacher-class/index.html
 - **A: Playful student cards** — yellow banner with the class code, four stat tiles, then a card per tag with avatar, picture password, progress ring and live status. Stuck students get a red outline. Click a card for actions.
 - **B: Clean progress matrix** — one table: tag × 7 steps as colored cells, filters (here now, stuck, finished step 3), row click fills the side panel; class settings toggles for apps, 13+ and AI hints.
 - **C: Classroom assignments** — tabs for Assignments, Roster and Settings; a "live now" strip of 12 dots; each assignment expands to a per-tag table; settings show the age band, app allowlist and the COPPA authorization attestation.
+- **D: Experiential site** — site-brand chrome: blue navbar, a red class-code band like the site's red sections, four stat cards on grey, a striped Bootstrap-style roster table with progress bars, dark footer.
 
 ## What to Look For
 - "Put it on the board" opens a projector-sized code screen in every variant. Is the join URL clear enough for a nine-year-old?

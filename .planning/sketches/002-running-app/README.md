@@ -20,6 +20,7 @@ open .planning/sketches/002-running-app/index.html
 - **A: Playful coach** — a 340px "coach" column of speech-bubble cards on the left, the current step in yellow with a big step number, bridge tucked in a small card at the bottom.
 - **B: Clean panel + status bar** — collapsible lesson panel with the full step list, breadcrumb header, and a mono status bar across the bottom that shows every bridge field.
 - **C: Classroom assignment** — assignment header with due date, progress bar and a Turn in button; lesson panel on the right with a teacher note; bridge as a small footer inside the panel.
+- **D: Experiential site** — site-brand chrome: blue navbar with breadcrumb, a grey "Connected app" strip carrying the bridge fields as badges, lesson panel left in Montserrat with red actions, dark footer bar like the site footer.
 
 ## What to Look For
 - Play the loop in each: Connect (robot lock goes to `wpi.xrpweb`) → Run (shell prints reflectance values) → the step's auto-check turns green → Next step (new context sent to the app).

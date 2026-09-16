@@ -54,6 +54,36 @@
   --shadow-lg: 8px 8px 0 #2B2B3A;
 }
 
+/* Pulled from experiential.bot (Odoo theme): --o-color-1 #D1182C red, --o-color-3 #22527B blue,
+   --o-color-5 #343a40 dark, --o-color-2 #e9ecef grey; Montserrat 300/400/600, headings 500. */
+.theme-experiential {
+  --color-bg: #FFFFFF;
+  --color-surface: #FFFFFF;
+  --color-surface-2: #E9ECEF;
+  --color-border: #DEE2E6;
+  --color-text: #343A40;
+  --color-text-muted: #6C757D;
+  --color-primary: #D1182C;
+  --color-primary-hover: #B21425;
+  --color-primary-soft: #FBE3E6;
+  --color-secondary: #22527B;
+  --color-secondary-soft: #DCE7F1;
+  --color-accent: #22527B;
+  --color-danger: #DC3545;
+  --color-success: #28A745;
+  --color-dark: #343A40;
+  --font-display: 'Montserrat', system-ui, sans-serif;
+  --font-sans: 'Montserrat', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --text-xs: 12px; --text-sm: 13px; --text-base: 15px; --text-lg: 17px; --text-xl: 20px; --text-2xl: 26px; --text-3xl: 34px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-6: 24px; --space-8: 32px; --space-12: 48px;
+  --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px; --radius-full: 9999px;
+  --border-w: 1px;
+  --shadow-sm: 0 .125rem .25rem rgba(0,0,0,.075);
+  --shadow-md: 0 .5rem 1rem rgba(0,0,0,.15);
+  --shadow-lg: 0 1rem 3rem rgba(0,0,0,.175);
+}
+
 .theme-classroom {
   --color-bg: #F1F3F7;
   --color-surface: #FFFFFF;

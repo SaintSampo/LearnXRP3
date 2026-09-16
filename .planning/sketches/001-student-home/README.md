@@ -18,6 +18,7 @@ open .planning/sketches/001-student-home/index.html
 - **A: Playful workshop** — chunky app tiles with 3px borders and offset shadows, a yellow "keep going" hero, robot card beside it. Scratch energy, aimed at 9 to 13.
 - **B: Clean maker tool** — left rail, search, compact app cards with metadata chips, recent work table, robot panel on the right. Arduino Cloud posture, works to college age.
 - **C: Classroom-first** — class banner, "Today" assignment queue with step counts and due dates, teacher announcements, apps demoted to a "free explore" row.
+- **D: Experiential site** — built from experiential.bot: blue navbar (#22527B) with the white wordmark, red primary buttons (#D1182C), Montserrat, white/grey/dark section bands, the site's isometric hero illustration. Reads as "the website turned into an app".
 
 ## What to Look For
 - Which one makes a nine-year-old start in under two minutes, and which one a sixteen-year-old is not embarrassed by.

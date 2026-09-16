@@ -6,8 +6,10 @@ LearnXRP3 follows the Launcher architecture (Proposal A): a thin shell that laun
 ## Reference Points
 Scratch, Code.org (class codes, picture passwords, kid-safe), Arduino Cloud and Onshape (professional tools with a light touch). XRPWeb (WPI) is the real third-party app inside the frame.
 
+A fourth variant, **Experiential site**, was added to every sketch on Jacob's request: it uses the live experiential.bot brand as-is (Odoo theme values: red #D1182C, blue #22527B, dark #343A40, grey #E9ECEF, Montserrat 300/400/600 with 500-weight headings, the white wordmark logo, the isometric hero illustration) so the team can judge "our website turned into an app" against the three invented vibes.
+
 ## Themes
-`themes/default.css` carries all three palettes scoped as `.theme-playful`, `.theme-clean`, `.theme-classroom`. The sketch toolbar can force one theme onto every variant.
+`themes/default.css` carries all four palettes scoped as `.theme-playful`, `.theme-clean`, `.theme-classroom`, `.theme-experiential`. The sketch toolbar can force one theme onto every variant.
 
 ## Sketches
 
