@@ -8,8 +8,11 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/theme.css">
 <style>
-.wrap{padding:32px;flex:1}
-.doors{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:start}
+.wrap{padding:32px;flex:1;width:100%;max-width:1264px;margin:0 auto;display:flex;flex-direction:column;justify-content:center}
+.wrap.state{display:none}.wrap.state.on{display:flex}
+.doors{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:stretch}
+.big,.door{display:flex;flex-direction:column}
+.door .demo-cta{margin-top:auto}
 .big{background:linear-gradient(120deg,var(--color-secondary),#2E6EA6 70%,var(--color-accent));color:#fff;border-radius:var(--radius-lg);padding:40px 32px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
 .big::before{content:"";position:absolute;right:110px;top:-60px;width:220px;height:420px;background:linear-gradient(115deg,transparent 45%,rgba(209,24,44,.8) 45% 58%,transparent 58%);pointer-events:none}
 [dir=rtl] .big::before{right:auto;left:110px;transform:scaleX(-1)}
@@ -76,8 +79,8 @@
       <div class="field"><label class="lbl" for="email" data-i18n="emailLabel">Work or personal email</label><input class="in" id="email" placeholder="you@school.org" type="email"></div>
       <button class="btn btn-out block" onclick="emailLink()" data-i18n="emailLink">Email me a sign-in link</button>
       <div class="help" data-i18n="noPw">No password to remember. The link works once and expires in 15 minutes.</div>
-      <div class="or">demo</div>
-      <button class="btn btn-primary block" onclick="demoTeacher()" data-i18n="demoTeacher">Demo: sign in as Ms. Rivera</button>
+      <div class="demo-cta"><div class="or">demo</div>
+      <button class="btn btn-primary block" onclick="demoTeacher()" data-i18n="demoTeacher">Demo: sign in as Ms. Rivera</button></div>
     </section>
   </div>
   <div class="explore"><div><b style="font-weight:600" data-i18n="exploreTitle">Just exploring, or playing at home?</b> <span class="muted" data-i18n="exploreSub">No account needed. Your work stays on this computer. A parent can add a family class later to see progress.</span></div><button class="btn btn-out" onclick="explore()" data-i18n="startNoAccount">Start without an account</button></div>
