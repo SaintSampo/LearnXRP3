@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LearnXRP · Teacher</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M38 4h-9L2 36h9z' fill='%230A6EFF'/%3E%3Cpath d='M2 4h9l27 32h-9z' fill='%23D1182C'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+.top{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:stretch;margin-bottom:16px}
+.room{display:flex;flex-direction:column;gap:10px}
+.room h1{font-size:26px;margin:2px 0 0}
+.room .st{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--color-text-muted)}
+.room .st i{width:10px;height:10px;border-radius:50%;background:var(--color-border);display:inline-block}
+.room.live .st i{background:var(--color-success);box-shadow:0 0 0 4px #E3F5EA}
+.codebox{display:none;align-items:center;gap:16px;margin-top:6px;flex-wrap:wrap}
+.room.live .codebox{display:flex}
+.codebox .code{font-family:var(--font-mono);font-size:34px;letter-spacing:.16em;color:var(--color-secondary);font-weight:500;background:var(--color-bg);border-radius:var(--radius-sm);padding:6px 18px}
+.codebox .url{font-size:14px;color:var(--color-text-muted)}
+.lock{font-size:12px;color:var(--color-text-muted);display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:8px;border-top:1px solid var(--color-border)}
+.queue{display:flex;flex-direction:column;gap:8px;min-height:180px;box-shadow:var(--shadow-md)}
+.queue .hd{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.queue .hd h3{font-size:15px}
+.req{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-sm);background:var(--color-accent-soft);animation:pop .25s ease}
+@keyframes pop{from{transform:translateY(6px);opacity:0}to{transform:none;opacity:1}}
+.req .nm{font-weight:600;flex:1}
+.req .from{font-size:11px;color:var(--color-text-muted);display:block;font-weight:400}
+.empty{font-size:13px;color:var(--color-text-muted);text-align:center;padding:20px 8px;flex:1;display:grid;place-items:center}
+.auto{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--color-text-muted);border-top:1px solid var(--color-border);padding-top:8px;margin-top:auto}
+.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.switch i{width:36px;height:20px;border-radius:10px;background:var(--color-surface-2);border:1px solid var(--color-border);position:relative;transition:all .15s ease}
+.switch i::after{content:"";position:absolute;top:1px;left:1px;width:14px;height:14px;border-radius:50%;background:var(--color-text-muted);transition:all .15s ease}
+.switch.on i{background:var(--color-accent-soft)}
+.switch.on i::after{left:17px;background:var(--color-accent)}
+.list{background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-sm);overflow:hidden}
+.li{display:grid;grid-template-columns:1.2fr 1fr 1.3fr 110px;gap:16px;align-items:center;padding:11px 18px;border-bottom:1px solid var(--color-border);font-size:14px}
+.li:last-child{border-bottom:0}
+.li.hd{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-muted);font-weight:600;background:var(--color-bg);padding:8px 18px}
+.li .nm{font-weight:600}
+.li .nm small{display:block;font-weight:400;font-size:11px;color:var(--color-text-muted);font-family:var(--font-mono)}
+.li .p{display:flex;align-items:center;gap:10px;color:var(--color-text-muted);font-size:13px}
+.li .bar{height:6px;border-radius:3px;background:var(--color-surface-2);width:90px;overflow:hidden;flex:none}
+.li .bar i{display:block;height:100%;background:var(--color-secondary)}
+.li .st{display:flex;align-items:center;gap:8px;font-size:13px}
+.li .st i{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--color-success);flex:none}
+.li .st i.amber{background:var(--amber)}
+.li .rb{font-family:var(--font-mono);font-size:12px;color:var(--color-text-muted)}
+.li.new{background:#F3FBF6}
+.foot2{display:flex;gap:8px;align-items:center;margin-top:16px;flex-wrap:wrap;font-size:13px;color:var(--color-text-muted)}
+.foot2 .sp{flex:1}
+.how{margin-top:16px;background:var(--color-secondary-soft);border-radius:var(--radius-md);padding:16px 24px;font-size:13px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.how b{display:block;font-weight:600;margin-bottom:2px}
+.board{position:fixed;inset:0;background:rgba(20,25,35,.6);display:none;align-items:center;justify-content:center;z-index:300}
+.board.open{display:flex}
+.board .card{width:min(900px,94%);padding:48px;text-align:center}
+.board .code{font-family:var(--font-mono);font-size:clamp(48px,10vw,120px);letter-spacing:.18em;line-height:1;margin:12px 0;color:var(--color-secondary)}
+.board .url{font-size:26px;font-family:var(--font-mono)}
+@media (max-width:900px){.top,.how{grid-template-columns:1fr}.li{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header id="ribbon" class="rb"></header>
+<main class="band" style="flex:1">
+  <div class="top">
+    <div class="card room" id="room">
+      <span class="eyebrow" id="cls-eyebrow"></span>
+      <h1>Line follower · <span data-i18n="step">Step</span> <span id="stepn"></span></h1>
+      <div class="st"><i></i><span id="room-st"></span></div>
+      <div class="codebox"><span class="code" id="code"></span><span class="url" id="code-help"></span><button class="btn btn-out" onclick="document.getElementById('board').classList.add('open')" data-i18n="showBoard">Show on board</button></div>
+      <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap"><button class="btn btn-primary" id="start" onclick="startRoom()" data-i18n="startClass">Start class</button><button class="btn btn-out" id="end" style="display:none" onclick="endRoom()" data-i18n="endClass">End class</button><a class="btn btn-ghost" href="index.html" target="_blank" rel="noopener" data-i18n="openStudent">Open a student tab</a></div>
+      <div class="lock"><svg width="14" height="14" viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="7" rx="2" fill="#22527B"/><path d="M5 7V5a3 3 0 016 0v2" fill="none" stroke="#22527B" stroke-width="1.6"/></svg><span data-i18n="lock"></span></div>
+    </div>
+    <div class="card queue">
+      <div class="hd"><h3 data-i18n="asking">Asking to join</h3><button class="btn btn-primary sm" id="admitall" onclick="admitAll()" disabled data-i18n="letAll">Let everyone in</button></div>
+      <div id="queue" style="display:flex;flex-direction:column;gap:6px"></div>
+      <div class="empty" id="qempty" data-i18n="nobodyYet"></div>
+      <div class="auto"><span data-i18n="autoAdmit"></span><label class="switch" id="autosw" onclick="toggleAuto()"><i></i></label></div>
+    </div>
+  </div>
+  <div class="list" id="list"></div>
+  <div class="foot2"><span id="sum"></span><span class="sp"></span><button class="btn btn-out sm" onclick="simulate()" data-i18n="simulate">Demo: simulate students arriving</button><button class="btn btn-out sm" onclick="LX.toast('Roster saved on this computer. Export writes a file.')" data-i18n="exportRoster">Export roster</button><button class="btn btn-out sm" onclick="LX.toast('Google Classroom import is a later phase')" data-i18n="importGC">Import from Google Classroom</button></div>
+  <div class="how"><div><b data-i18n="how1"></b><span data-i18n="how1b"></span></div><div><b data-i18n="how2"></b><span data-i18n="how2b"></span></div><div><b data-i18n="how3"></b><span data-i18n="how3b"></span></div></div>
+</main>
+<footer class="footer" data-footer></footer>
+<div class="board" id="board" onclick="if(event.target===this)this.classList.remove('open')"><div class="card"><span class="eyebrow" id="board-cls"></span><div style="font-weight:600;font-size:28px" data-i18n="joinCode">Join with a code</div><div class="url">learnxrp.org/join</div><div class="code" id="board-code"></div><div class="muted" data-i18n="joinSub"></div></div></div>
+<script src="assets/shell.js"></script>
+<script>
+const S=LX.S,t=LX.t;
+if(S.role!=='teacher'){LX.set({role:'teacher'})}
+const CODE=S.classCode&&/^XRP-/.test(S.classCode)?S.classCode:'XRP-7K2Q';
+LX.set({classCode:CODE});
+LX.ribbon({crumb:`${S.className} · <b>${S.roomOpen?t('roomOpen'):t('roomClosed')}</b>`});
+document.getElementById('cls-eyebrow').innerHTML=LX.XMARK('#D1182C','#0A6EFF')+' '+S.className;
+document.getElementById('stepn').textContent=S.step;
+document.getElementById('code').textContent=CODE;document.getElementById('board-code').textContent=CODE;document.getElementById('board-cls').textContent=S.className;
+document.getElementById('code-help').innerHTML=t('codeHelp',{u:'learnxrp.org/join'});
+let Q=[];let roster=S.roster||[];
+const SIMS=[{n:'Maya',d:'Chromebook 04',known:true},{n:'Jamal',d:'Chromebook 11',known:true},{n:'Sofia',d:'Chromebook 07',known:true},{n:'Ethan',d:'Chromebook 02',known:false},{n:'Priya',d:'Chromebook 09',known:true},{n:'Leo',d:'Chromebook 12',known:false}];
+const STEPS=[3,4,3,5,2,4,3,3,6,1,2,0];
+function autoOn(){return !!S.autoAdmit}
+function paintRoom(){const r=document.getElementById('room');r.classList.toggle('live',S.roomOpen);document.getElementById('room-st').textContent=S.roomOpen?t('roomOpenMsg'):(roster.length?t('classEnded',{n:roster.length}):t('roomClosedMsg'));document.getElementById('start').style.display=S.roomOpen?'none':'';document.getElementById('end').style.display=S.roomOpen?'':'none';document.getElementById('autosw').classList.toggle('on',autoOn());LX.ribbon({crumb:`${S.className} · <b>${S.roomOpen?t('roomOpen'):t('roomClosed')}</b>`})}
+function startRoom(){LX.set({roomOpen:true,roster:[]});roster=[];Q=[];paintRoom();renderQ();renderList();LX.toast('Room opened. Names go straight to this computer.')}
+function endRoom(){LX.set({roomOpen:false});Q=[];paintRoom();renderQ()}
+function toggleAuto(){LX.set({autoAdmit:!autoOn()});paintRoom();LX.toast(autoOn()?'Returning students are let in automatically':'You will approve every join')}
+/* real requests arrive from index.html in another tab via localStorage */
+LX.on('lx.join',m=>{if(!S.roomOpen){LX.emit('lx.deny',{name:m.name});LX.toast(m.name+' tried to join, but the room is closed.');return}arrive({n:m.name,d:m.device||'another tab',known:!!m.known,real:true})});
+function arrive(p){if(p.known&&autoOn()){admit(p,true);return}Q.push(p);renderQ()}
+function renderQ(){document.getElementById('queue').innerHTML=Q.map((p,i)=>`<div class="req"><span class="nm">${p.n}<span class="from">${p.known?t('beenBefore'):t('newName')} · ${p.d}${p.real?' · live':''}</span></span><button class="btn btn-primary sm" onclick="admitIdx(${i})">${t('letIn')}</button><button class="btn btn-out sm" onclick="denyIdx(${i})">${t('notMine')}</button></div>`).join('');document.getElementById('qempty').style.display=Q.length?'none':'';document.getElementById('admitall').disabled=!Q.length}
+function admitIdx(i){const p=Q.splice(i,1)[0];renderQ();admit(p,false)}
+function denyIdx(i){const p=Q.splice(i,1)[0];renderQ();LX.emit('lx.deny',{name:p.n});LX.toast(p.n+' was not let in.')}
+function admitAll(){const all=Q.splice(0);renderQ();all.forEach(p=>admit(p,false))}
+function admit(p,auto){const i=roster.length;roster.push({n:p.n,d:p.d,tag:LX.newTag(),step:STEPS[i%STEPS.length]||3,app:'Blocks Lab',robot:i%3===0?'XRP-'+(3000+i*7).toString(16).toUpperCase().slice(-4):null,min:i%4===2?12+i:0,fresh:true});LX.set({roster});LX.emit('lx.admit',{name:p.n});renderList();paintRoom();LX.toast(auto?`${p.n} is back on ${p.d}. Let in automatically.`:`${p.n} is in.`)}
+function renderList(){const l=document.getElementById('list');l.innerHTML=`<div class="li hd"><span>${t('student')}</span><span>${t('progressCol')}</span><span>${t('rightNow')}</span><span>${t('robotCol')}</span></div>`+(roster.length?roster.map(r=>`<div class="li ${r.fresh?'new':''}"><span class="nm">${r.n}<small>${r.tag} · ${r.d}</small></span><span class="p"><span class="bar"><i style="width:${Math.round(r.step/7*100)}%"></i></span>${t('stepOf',{s:r.step})}</span><span class="st"><i class="${r.min?'amber':''}"></i>${r.min?t('quiet',{m:r.min,a:r.app}):t('working',{a:r.app})}</span><span class="rb">${r.robot||'—'}</span></div>`).join(''):`<div class="li" style="color:var(--color-text-muted);grid-template-columns:1fr">${t('appear')}</div>`);document.getElementById('sum').textContent=t('inRoom',{n:roster.length});setTimeout(()=>{roster.forEach(r=>r.fresh=false);l.querySelectorAll('.li.new').forEach(e=>e.classList.remove('new'))},1500)}
+function simulate(){if(!S.roomOpen){LX.toast(t('roomClosedMsg'));return}let i=0;const f=setInterval(()=>{if(i>=SIMS.length){clearInterval(f);return}arrive(SIMS[i++])},1500)}
+paintRoom();renderQ();renderList();
+</script>
+</body>
+</html>

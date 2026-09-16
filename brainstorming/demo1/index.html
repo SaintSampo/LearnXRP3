@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LearnXRP · Join</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M38 4h-9L2 36h9z' fill='%230A6EFF'/%3E%3Cpath d='M2 4h9l27 32h-9z' fill='%23D1182C'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+.wrap{padding:32px;flex:1}
+.doors{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:start}
+.big{background:linear-gradient(120deg,var(--color-secondary),#2E6EA6 70%,var(--color-accent));color:#fff;border-radius:var(--radius-lg);padding:40px 32px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+.big::before{content:"";position:absolute;right:110px;top:-60px;width:220px;height:420px;background:linear-gradient(115deg,transparent 45%,rgba(209,24,44,.8) 45% 58%,transparent 58%);pointer-events:none}
+[dir=rtl] .big::before{right:auto;left:110px;transform:scaleX(-1)}
+.big > *{position:relative}
+.big h1{font-size:34px;margin:6px 0 6px;letter-spacing:-.01em}
+.big p{opacity:.9;margin:0 0 22px;font-size:15px}
+.big .in.code{font-size:40px;padding:18px;border-radius:16px;border:0;color:var(--color-secondary)}
+.big .in.name{margin-top:10px;border:0;font-size:18px;text-align:center;padding:14px;border-radius:14px}
+.big .btn-primary{margin-top:14px;font-size:16px;padding:.9rem 1.6rem}
+.big .note{font-size:12px;opacity:.85;display:flex;gap:8px;align-items:flex-start;margin-top:16px}
+.big .eyebrow{color:rgba(255,255,255,.8)}
+.door{padding:32px}
+.door h2{font-size:26px;margin:6px 0 4px}
+.door p{margin:0 0 18px;color:var(--color-text-muted);font-size:14px}
+.sso{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.or{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--color-text-muted);margin:14px 0}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--color-border)}
+.help{font-size:12px;color:var(--color-text-muted);margin-top:10px}
+.explore{margin-top:24px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff;border-radius:var(--radius-md);padding:16px 24px;box-shadow:var(--shadow-sm);font-size:14px;flex-wrap:wrap}
+.state{display:none}.state.on{display:block}
+.center{text-align:center;padding:14px 0}
+.ic{width:18px;height:18px}
+/* welcome back */
+.wb{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start}
+.wb h1{font-size:28px;margin:4px 0 4px}
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px;margin-top:16px}
+.person{background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-sm);padding:16px;text-align:center;font:inherit;color:inherit;border:2px solid transparent;cursor:pointer;transition:all .2s ease;display:flex;flex-direction:column;align-items:center;gap:6px}
+.person:hover{box-shadow:var(--shadow-md);transform:translateY(-3px)}
+.person .av{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:16px}
+.person b{font-weight:600}
+.person small{font-size:11px;color:var(--color-text-muted)}
+.person.add{border:2px dashed var(--color-border);background:transparent;box-shadow:none;justify-content:center;color:var(--color-secondary);font-weight:600}
+.device{font-size:12px;color:var(--color-text-muted);display:flex;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap}
+.device a{font-weight:600;cursor:pointer}
+@media (max-width:900px){.doors,.wb{grid-template-columns:1fr}.wrap{padding:16px}.big{padding:28px 20px}.big h1{font-size:28px}}
+</style>
+</head>
+<body>
+<header id="ribbon" class="rb"></header>
+
+<!-- ===== LOGIN: two doors (A) with the code-first card (C) ===== -->
+<main class="wrap state" id="v-login">
+  <div class="doors">
+    <section class="big">
+      <span class="eyebrow">XLOGO learnxrp.org/join</span>
+      <h1 data-i18n="joinTitle">Type the code on the board</h1>
+      <p data-i18n="joinSub">Then your first name. Your teacher lets you in. Nothing to remember.</p>
+      <div class="state on" id="s1">
+        <input class="in code" id="code" placeholder="XRP-____" maxlength="8" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+        <input class="in name" id="name" data-i18n-ph="nameLabel" placeholder="Your first name" autocomplete="off">
+        <button class="btn btn-primary" onclick="join()" data-i18n="join">Join</button>
+        <div class="note"><svg width="14" height="14" viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="7" rx="2" fill="#fff"/><path d="M5 7V5a3 3 0 016 0v2" fill="none" stroke="#fff" stroke-width="1.6"/></svg><span data-i18n="privacyNote">Your name goes only to your teacher's computer. LearnXRP never stores it.</span></div>
+      </div>
+      <div class="state center" id="s2"><span class="spin" style="border-color:rgba(255,255,255,.3);border-top-color:#fff"></span><h2 style="margin:12px 0 4px;font-size:24px" id="wait-title"></h2><div style="opacity:.9" id="wait-sub"></div></div>
+      <div class="state center" id="s3"><h2 style="margin:0 0 4px;font-size:26px" id="in-title"></h2><div style="opacity:.9;margin-bottom:14px" id="in-sub"></div><a class="btn" style="color:var(--color-secondary)" href="home.html" data-i18n="letsGo">Let's go</a></div>
+      <div class="state center" id="s4"><h2 style="margin:0 0 4px;font-size:24px">Hmm</h2><div style="opacity:.9;margin-bottom:14px" data-i18n="notLetIn"></div><button class="btn" style="color:var(--color-secondary)" onclick="show('s1')">Try again</button></div>
+    </section>
+    <section class="card door">
+      <span class="eyebrow">XMARK <span data-i18n="eduEyebrow">Teachers, mentors, parents</span></span>
+      <h2 data-i18n="eduTitle">Sign in</h2>
+      <p data-i18n="eduSub">Run a class, a club, a camp or a family. Students never need this side.</p>
+      <div class="sso"><button class="btn" onclick="LX.toast('Google sign-in opens in a popup. School accounts work.')">GICON <span data-i18n="google">Google</span></button><button class="btn" onclick="LX.toast('Microsoft sign-in opens in a popup.')">MICON <span data-i18n="microsoft">Microsoft</span></button></div>
+      <div class="or">or</div>
+      <div class="field"><label class="lbl" for="email" data-i18n="emailLabel">Work or personal email</label><input class="in" id="email" placeholder="you@school.org" type="email"></div>
+      <button class="btn btn-out block" onclick="emailLink()" data-i18n="emailLink">Email me a sign-in link</button>
+      <div class="help" data-i18n="noPw">No password to remember. The link works once and expires in 15 minutes.</div>
+      <div class="or">demo</div>
+      <button class="btn btn-primary block" onclick="demoTeacher()" data-i18n="demoTeacher">Demo: sign in as Ms. Rivera</button>
+    </section>
+  </div>
+  <div class="explore"><div><b style="font-weight:600" data-i18n="exploreTitle">Just exploring, or playing at home?</b> <span class="muted" data-i18n="exploreSub">No account needed. Your work stays on this computer. A parent can add a family class later to see progress.</span></div><button class="btn btn-out" onclick="explore()" data-i18n="startNoAccount">Start without an account</button></div>
+</main>
+
+<!-- ===== WELCOME BACK (E): shown when this device remembers students ===== -->
+<main class="wrap state" id="v-back">
+  <div class="wb">
+    <div>
+      <span class="eyebrow">XMARK <span id="wb-eyebrow"></span></span>
+      <h1 data-i18n="welcomeBack">Welcome back. Who are you today?</h1>
+      <div class="muted" style="font-size:14px" data-i18n="rememberSub">This computer remembers who used it in this class. Tap your name and your teacher lets you in.</div>
+      <div class="people" id="people"></div>
+      <div class="device"><svg width="14" height="14" viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="7" rx="2" fill="#22527B"/><path d="M5 7V5a3 3 0 016 0v2" fill="none" stroke="#22527B" stroke-width="1.6"/></svg><span data-i18n="namesLive">Names live on this computer and on your teacher's. Not on LearnXRP.</span> <a onclick="forget()" data-i18n="forget">Forget everyone</a></div>
+      <div class="card" id="wb-state" style="margin-top:24px;display:none"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card"><span class="eyebrow" data-i18n="diffClass">Different class?</span><h3 style="font-size:17px;margin:4px 0 10px" data-i18n="joinCode">Join with a code</h3><input class="in code" id="wb-code" placeholder="XRP-____" maxlength="8" oninput="this.value=this.value.toUpperCase()" style="font-size:20px;margin-bottom:10px"><button class="btn btn-out block" onclick="wbCode()" data-i18n="next">Next</button></div>
+      <div class="card"><span class="eyebrow" data-i18n="educators">Educators</span><h3 style="font-size:17px;margin:4px 0 10px" data-i18n="signIn">Sign in</h3><div class="sso" style="margin-bottom:8px"><button class="btn" onclick="LX.toast('Google sign-in')">GICON Google</button><button class="btn" onclick="LX.toast('Microsoft sign-in')">MICON Microsoft</button></div><button class="btn btn-primary block" onclick="demoTeacher()" data-i18n="demoTeacher">Demo: sign in as Ms. Rivera</button></div>
+      <div class="muted" style="font-size:13px;padding:0 6px"><span data-i18n="exploreTitle"></span> <a style="font-weight:600;cursor:pointer" onclick="explore()" data-i18n="startNoAccount">Start without an account</a></div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer" data-footer></footer>
+
+<script src="assets/shell.js"></script>
+<script>
+const S=LX.S,t=LX.t;
+const GICON=`<svg class="ic" viewBox="0 0 24 24"><path d="M21.6 12.2c0-.7-.1-1.3-.2-1.9H12v3.7h5.4a4.6 4.6 0 01-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z" fill="#4285F4"/><path d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1a6 6 0 01-5.6-4.1H3.1v2.6A10 10 0 0012 22z" fill="#34A853"/><path d="M6.4 13.9a6 6 0 010-3.8V7.5H3.1a10 10 0 000 9z" fill="#FBBC05"/><path d="M12 6c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 003.1 7.5l3.3 2.6A6 6 0 0112 6z" fill="#EA4335"/></svg>`;
+const MICON=`<svg class="ic" viewBox="0 0 24 24"><rect x="2" y="2" width="9.5" height="9.5" fill="#F25022"/><rect x="12.5" y="2" width="9.5" height="9.5" fill="#7FBA00"/><rect x="2" y="12.5" width="9.5" height="9.5" fill="#00A4EF"/><rect x="12.5" y="12.5" width="9.5" height="9.5" fill="#FFB900"/></svg>`;
+document.body.innerHTML=document.body.innerHTML.replace(/GICON/g,GICON).replace(/MICON/g,MICON).replace(/XMARK/g,LX.XMARK('#D1182C','#0A6EFF')).replace(/XLOGO/g,LX.XMARK('#fff','rgba(255,255,255,.7)'));
+LX.i18n();
+LX.ribbon({crumb:'<b>'+t('home')+'</b>'});
+const CODE=/^XRP-[A-Z0-9]{4}$/;
+function show(id){['s1','s2','s3','s4'].forEach(s=>document.getElementById(s).classList.toggle('on',s===id))}
+function view(v){document.getElementById('v-login').classList.toggle('on',v==='login');document.getElementById('v-back').classList.toggle('on',v==='back')}
+/* which view: welcome back if this device remembers anyone */
+const params=new URLSearchParams(location.search);
+if((S.remembered||[]).length&&!params.has('new')){view('back');renderPeople()}else view('login');
+function renderPeople(){document.getElementById('wb-eyebrow').textContent=S.device+' · '+S.className;const cols=['#0A6EFF','#22527B','#D1182C','#1E9E5A','#7048E8','#E5A000'];document.getElementById('people').innerHTML=S.remembered.map((r,i)=>`<button class="person" onclick="back('${r.name.replace(/'/g,'')}')"><span class="av" style="background:${cols[i%cols.length]}">${r.name[0].toUpperCase()}</span><b>${r.name}</b><small>${r.last} · step ${r.step}</small></button>`).join('')+`<button class="person add" onclick="view('login')">${t('newHere')}</button>`}
+/* the join handshake: write a request; a teacher tab (teacher.html) answers with lx.admit or lx.deny.
+   If no teacher tab answers within 4s, the demo lets you in and says so. */
+let pending=null;
+function requestJoin(name,known,onAdmit,onDeny){pending={name,known,onAdmit,onDeny};LX.emit('lx.join',{name,device:S.device,known,code:S.classCode||'XRP-7K2Q'});pending.timer=setTimeout(()=>{if(pending){finishAdmit(name,true)}},4000)}
+LX.on('lx.admit',m=>{if(pending&&m.name===pending.name){clearTimeout(pending.timer);finishAdmit(m.name,false)}});
+LX.on('lx.deny',m=>{if(pending&&m.name===pending.name){clearTimeout(pending.timer);const p=pending;pending=null;p.onDeny&&p.onDeny()}});
+function finishAdmit(name,auto){const p=pending;pending=null;const rem=(S.remembered||[]).filter(r=>r.name!==name);rem.unshift({name,last:'today',step:S.step});LX.set({role:'student',name,tag:S.tag||LX.newTag(),classCode:S.classCode||'XRP-7K2Q',sync:'synced',remembered:rem});if(auto)LX.toast(t('demoAdmit'));p&&p.onAdmit&&p.onAdmit()}
+function join(){const c=document.getElementById('code'),n=document.getElementById('name');if(!CODE.test(c.value)){c.classList.add('bad');LX.toast(t('badCode'));setTimeout(()=>c.classList.remove('bad'),1500);return}if(!n.value.trim()){n.classList.add('bad');n.focus();return}const name=n.value.trim();LX.set({classCode:c.value});document.getElementById('wait-title').textContent=t('waitTitle',{n:name});document.getElementById('wait-sub').textContent=t('waitSub',{t:S.teacher});show('s2');requestJoin(name,false,()=>{document.getElementById('in-title').textContent=t('inTitle',{n:name});document.getElementById('in-sub').textContent=t('inSub',{c:S.className,s:S.step});show('s3')},()=>show('s4'))}
+function back(name){const s=document.getElementById('wb-state');s.style.display='block';s.innerHTML=`<div style="display:flex;align-items:center;gap:14px"><span class="spin"></span><div><b style="font-weight:600">${t('waitTitle',{n:name})}</b><div class="muted" style="font-size:13px">${t('waitSub',{t:S.teacher})}</div></div></div>`;requestJoin(name,true,()=>{s.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap"><div><b style="font-weight:600">${t('inTitle',{n:name})}</b><div class="muted" style="font-size:13px">${t('inSub',{c:S.className,s:S.step})}</div></div><a class="btn btn-primary" href="home.html">${t('letsGo')}</a></div>`},()=>{s.innerHTML=`<b style="font-weight:600">${t('notLetIn')}</b>`})}
+function wbCode(){const c=document.getElementById('wb-code');if(!CODE.test(c.value)){c.classList.add('bad');LX.toast(t('badCode'));return}LX.set({classCode:c.value});view('login');document.getElementById('code').value=c.value;document.getElementById('name').focus()}
+function forget(){LX.set({remembered:[]});view('login');LX.toast(t('forget'))}
+function emailLink(){const e=document.getElementById('email');if(!/.+@.+\..+/.test(e.value)){e.classList.add('bad');return}LX.toast('Demo: a real deploy emails a one-time link to '+e.value)}
+function demoTeacher(){LX.set({role:'teacher',sync:'synced'});location.href='teacher.html'}
+function explore(){LX.set({role:'student',name:S.name||'Explorer',tag:S.tag||LX.newTag(),classCode:null,sync:'local'});location.href='home.html'}
+</script>
+</body>
+</html>
