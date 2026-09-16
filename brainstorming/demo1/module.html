@@ -84,6 +84,7 @@ body{height:100vh;overflow:hidden;zoom:1}
 const S=LX.S,t=LX.t;
 if(S.role==='guest'&&!S.name){location.replace('index.html')}
 const _q=new URLSearchParams(location.search);const app=LX.MODULES.find(a=>a.id===(_q.get('module')||_q.get('app')))||LX.MODULES[0];
+if(app.page){location.replace(app.page)}
 const LMS_ON=!!(S.lms&&S.lms!=='off')&&app.lesson!==false;
 const L=LX.LESSON;
 let step=S.step,done=new Set(S.doneSteps||[]);

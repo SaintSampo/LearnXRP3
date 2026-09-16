@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LearnXRP · Compete</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M38 4h-9L2 36h9z' fill='%230A6EFF'/%3E%3Cpath d='M2 4h9l27 32h-9z' fill='%23D1182C'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 32px;background:#fff;border-bottom:1px solid var(--color-border)}
+.steps{width:100%;max-width:1344px;margin:0 auto}
+.stepwrap{background:#fff;border-bottom:1px solid var(--color-border)}
+.steps button{font:600 13px var(--font-sans);background:var(--color-bg);border:2px solid transparent;border-radius:12px;padding:10px 12px;cursor:pointer;text-align:start;display:flex;gap:10px;align-items:center;color:var(--color-text-muted)}
+.steps button .n{width:26px;height:26px;border-radius:50%;background:var(--color-border);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800;flex:none}
+.steps button.done .n{background:var(--color-success)}
+.steps button.on{border-color:var(--color-accent);background:var(--color-accent-soft);color:var(--color-text)}
+.steps button.on .n{background:var(--color-accent)}
+.steps button small{display:block;font-weight:400;font-size:11px}
+.pane{display:none}.pane.on{display:block}
+.todo{background:var(--color-secondary-soft);border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.todo b{font-weight:600}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.play{display:grid;grid-template-columns:280px 1fr;gap:16px}
+.check{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.check label{display:flex;gap:8px;align-items:center;cursor:pointer}
+kbd{font:600 11px var(--font-mono);background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:5px;padding:1px 6px}
+.awards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.award{background:var(--color-bg);border-radius:12px;padding:12px;font-size:13px}
+.award b{display:block;font-weight:600}
+.alliance{border-radius:12px;padding:10px 12px;color:#fff;font-weight:600}
+.alliance.red{background:#C8102E}.alliance.blue{background:#1F5FBF}
+.clock{text-align:center;padding:18px}
+.timer{font-family:var(--font-mono);font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:.04em;line-height:1;font-size:84px}
+.phase{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-text-muted)}
+.state-auto .phase{color:var(--color-accent)}.state-teleop .phase{color:var(--color-success)}.state-ended .phase{color:var(--color-primary)}.state-paused .phase{color:#8A5A00}
+.score{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;font-size:13px}
+.score .task{display:contents}
+.score .ctl{display:inline-flex;align-items:center;gap:6px}
+.score .ctl button{width:26px;height:26px;border-radius:50%;border:0;background:rgba(255,255,255,.25);color:#fff;font-weight:800;cursor:pointer;font-size:14px}
+.score .ctl button:disabled{opacity:.4;cursor:not-allowed}
+.score .ctl b{min-width:18px;text-align:center;font-family:var(--font-mono)}
+.total{font-family:var(--font-mono);font-size:32px;font-weight:600;text-align:end;margin-top:6px}
+table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th,.tbl td{padding:8px 10px;border-bottom:1px solid var(--color-border);text-align:start;vertical-align:middle}
+.tbl th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-muted);font-weight:600;background:var(--color-bg)}
+.tbl tr.now{background:var(--color-accent-soft)}.tbl tr.done{color:var(--color-text-muted)}
+.tbl .r{text-align:end;font-family:var(--font-mono)}.tbl .rank{font-weight:700;color:var(--color-secondary)}
+.teamrow{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:var(--color-bg);font-size:13px}
+.teamrow .num{width:30px;height:30px;border-radius:9px;background:var(--color-secondary);color:#fff;font-weight:700;display:grid;place-items:center;font-size:12px;flex:none}
+.teamrow .nm{font-weight:600}.teamrow .mem{font-size:11px;color:var(--color-text-muted);font-family:var(--font-mono)}
+.teamrow .x{margin-inline-start:auto;border:0;background:transparent;color:var(--color-text-muted);cursor:pointer;font-size:14px}
+.statebtns{display:flex;gap:8px;flex-wrap:wrap}
+.btn-navy{background:var(--color-secondary);color:#fff;border-color:var(--color-secondary)}
+.btn-navy:hover{background:var(--color-dark)}
+.proj{position:fixed;inset:0;background:#0b1220;color:#fff;z-index:9500;display:none;flex-direction:column;align-items:center;justify-content:center;gap:24px;cursor:pointer;zoom:1}
+.proj.open{display:flex}
+.proj .timer{font-size:22vw}
+.proj .ps{display:grid;grid-template-columns:1fr 1fr;gap:48px;font-size:28px;font-weight:700}
+.proj .ps b{font-family:var(--font-mono);font-size:64px;display:block}
+@media (max-width:900px){.steps,.two,.play,.awards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header id="ribbon" class="rb"></header>
+<div class="stepwrap"><div class="steps" id="steps"><button class="on" onclick="step(1,this)"><span class="n">1</span><span>Teams<small>who is playing</small></span></button><button onclick="step(2,this)"><span class="n">2</span><span>Schedule<small>who plays whom, when</small></span></button><button onclick="step(3,this)"><span class="n">3</span><span>Play<small>run the matches</small></span></button><button onclick="step(4,this)"><span class="n">4</span><span>Results<small>rankings and awards</small></span></button></div></div>
+<main class="band" style="flex:1">
+  <div class="pane on" id="p1">
+    <div class="todo"><span><b>To do:</b> add every team, two students and one robot each. Done when every team has a robot.</span><div style="display:flex;gap:6px"><button class="btn btn-out sm" id="importbtn" onclick="importRoom()">Import pairs from the room</button><button class="btn btn-primary sm" onclick="step(2,steps()[1])">Next: Schedule →</button></div></div>
+    <div class="two">
+      <div class="card"><div id="teams" style="display:flex;flex-direction:column;gap:6px"></div><div style="display:flex;gap:6px;margin-top:10px"><input class="in" id="newteam" placeholder="Team name" onkeydown="if(event.key==='Enter')addTeam()"><input class="in" id="newrobot" placeholder="Robot" style="max-width:130px"><button class="btn btn-out sm" onclick="addTeam()">Add</button></div></div>
+      <div class="card" style="font-size:13px"><span class="eyebrow">Tips</span><ul style="margin:8px 0 0;padding-inline-start:18px;color:var(--color-text-muted)"><li>Six teams is a good size for one period: 9 matches, every team plays 3.</li><li>Pull pairs from the room roster; tags come with them.</li><li>Label robots to match. A team that swaps robots mid-day confuses the rankings.</li></ul></div>
+    </div>
+  </div>
+  <div class="pane" id="p2">
+    <div class="todo"><span><b>To do:</b> generate, check no team plays back-to-back, print. Done when the schedule is on the wall.</span><div style="display:flex;gap:6px"><button class="btn btn-out sm" onclick="genSchedule()">Generate</button><button class="btn btn-ghost sm" onclick="window.print()">Print</button><button class="btn btn-primary sm" onclick="step(3,steps()[2])">Next: Play →</button></div></div>
+    <div class="card" id="sched"></div>
+  </div>
+  <div class="pane" id="p3">
+    <div class="todo"><span><b>To do:</b> load the next match, run the checklist, start. Done when every match is committed.</span><span class="muted"><kbd>Space</kbd> start / pause &nbsp; <kbd>Enter</kbd> commit &nbsp; <kbd>Esc</kbd> abort &nbsp; <button class="btn btn-navy sm" onclick="document.getElementById('proj').classList.add('open')">Projector</button></span></div>
+    <div class="play">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="card"><span class="eyebrow">Before this match</span><div class="check" style="margin-top:8px"><label><input type="checkbox">Both robots on the start line</label><label><input type="checkbox">Batteries above 7.5 V</label><label><input type="checkbox">Drivers behind the tape</label><label><input type="checkbox">Board shows the match number</label></div></div>
+        <div class="card"><span class="eyebrow">Match</span><div id="mlabel" style="font-weight:600;margin-top:4px"></div><div class="statebtns" style="margin-top:10px" id="btns"></div></div>
+        <div class="card" style="font-size:12px;color:var(--color-text-muted)"><label style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="fast" onchange="E.fast=this.checked">Demo: fast clock</label><div style="margin-top:6px">Auto 0:30 · Teleop 2:00. Abort returns to Ready with no score. Scores reach the rankings only on Commit.</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="card clock" id="clock"><div class="phase" id="phase"></div><div class="timer" id="timer">2:30</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="alliance red" id="red"></div><div class="alliance blue" id="blue"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="pane" id="p4">
+    <div class="todo"><span><b>To do:</b> read the rankings aloud, hand out awards, print certificates. Done when the room is cheering.</span><div style="display:flex;gap:6px"><button class="btn btn-out sm" onclick="resetEvent()">New event</button><button class="btn btn-primary sm" onclick="window.print()">Print certificates</button></div></div>
+    <div class="card"><div id="rank"></div><div class="awards" id="awards"></div></div>
+  </div>
+</main>
+<footer class="footer" data-footer></footer>
+<div class="proj" id="proj" onclick="this.classList.remove('open')"><div class="eyebrow" style="color:#7cc8fb;font-size:16px" id="p-mlabel"></div><div class="phase" style="font-size:20px;color:#cbd5e1" id="p-phase"></div><div class="timer" id="p-timer">2:30</div><div class="ps"><div style="color:#ff8a94" id="p-red"></div><div style="color:#7cc8fb" id="p-blue"></div></div><div style="color:#94a3b8;font-size:13px">click anywhere to close</div></div>
+
+<script src="assets/shell.js"></script>
+<script>
+const S=LX.S,t=LX.t;
+if(S.role==='guest'&&!S.name){location.replace('index.html')}
+LX.ribbon({crumb:`<a href="${S.role==='teacher'?'teacher.html':'home.html'}">${t('home')}</a> / <b>Compete</b> · Line Follower Cup`});
+const steps=()=>document.querySelectorAll('#steps button');
+
+/* ---------- engine, persisted under its own key ---------- */
+const KEY='lx.compete';
+const TASKS=[{k:'lap',n:'Line lap',p:10},{k:'cube',n:'Cube delivered',p:5},{k:'park',n:'Parked at end',p:15},{k:'pen',n:'Penalty',p:-5}];
+const DEMO_TEAMS=[{id:1,n:'Otters',m:['Otter-42','Fox-17'],r:'XRP-3F2A'},{id:2,n:'Herons',m:['Heron-03','Newt-88'],r:'XRP-7B01'},{id:3,n:'Lynx',m:['Lynx-21','Moth-56'],r:'XRP-1C9D'},{id:4,n:'Pumas',m:['Puma-09','Wren-64'],r:'XRP-A011'},{id:5,n:'Yaks',m:['Yak-30','Ibis-75'],r:'XRP-3F2B'},{id:6,n:'Orcas',m:['Orca-48','Kiwi-12'],r:'XRP-9C22'}];
+let E;try{E=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!E||!E.teams){E={teams:DEMO_TEAMS.map(x=>({...x})),matches:[],cur:null}}
+E.state='ready';E.t=150;E.fast=false;E.tick=null;const AUTO=30,TOTAL=150;
+function save(){try{localStorage.setItem(KEY,JSON.stringify({teams:E.teams,matches:E.matches,cur:E.cur}))}catch(e){}}
+const teamById=id=>E.teams.find(x=>x.id===id);
+const newScore=()=>{const s={};TASKS.forEach(x=>s[x.k]=0);return s};
+const total=s=>TASKS.reduce((a,x)=>a+s[x.k]*x.p,0);
+function addTeam(){const n=document.getElementById('newteam').value.trim(),r=document.getElementById('newrobot').value.trim();if(!n)return;E.teams.push({id:Math.max(0,...E.teams.map(x=>x.id))+1,n,m:['tag-?','tag-?'],r:r||'unassigned'});document.getElementById('newteam').value='';document.getElementById('newrobot').value='';save();render();LX.toast('Added team '+n+(E.matches.length?'. Generate the schedule again to include them.':''))}
+function removeTeam(id){if(E.matches.length){LX.toast('Clear the schedule first (Results → New event)');return}E.teams=E.teams.filter(x=>x.id!==id);save();render()}
+function importRoom(){const r=(S.roster||[]).filter(x=>x.n);if(r.length<2){LX.toast('No room roster yet. Start class on the Teacher page and let students in, then import.');return}const names=['Otters','Herons','Lynx','Pumas','Yaks','Orcas','Geckos','Bison','Cranes','Dingos'];E.teams=[];for(let i=0;i<r.length;i+=2){const a=r[i],b=r[i+1];E.teams.push({id:E.teams.length+1,n:names[E.teams.length%names.length],m:[a.tag,b?b.tag:'—'],r:a.robot||(b&&b.robot)||'unassigned'})}E.matches=[];E.cur=null;save();render();LX.toast('Made '+E.teams.length+' teams from the room. Names stay on your device; teams carry tags.')}
+function genSchedule(){const ids=E.teams.map(x=>x.id);if(ids.length<2){LX.toast('Need at least two teams');return}const pairs=[];for(let i=0;i<ids.length;i++)for(let j=i+1;j<ids.length;j++)pairs.push([ids[i],ids[j]]);const played={};ids.forEach(i=>played[i]=0);const out=[];let last=[];const want=Math.min(pairs.length,Math.ceil(ids.length*3/2));while(out.length<want&&pairs.length){pairs.sort((a,b)=>(played[a[0]]+played[a[1]])-(played[b[0]]+played[b[1]]));let pick=pairs.find(p=>!last.includes(p[0])&&!last.includes(p[1]))||pairs[0];pairs.splice(pairs.indexOf(pick),1);played[pick[0]]++;played[pick[1]]++;last=pick;out.push({n:out.length+1,red:pick[0],blue:pick[1],rs:newScore(),bs:newScore(),done:false})}E.matches=out;E.cur=out[0]?0:null;E.state='ready';E.t=TOTAL;stopTick();save();render();LX.toast('Schedule: '+out.length+' matches, each team plays about '+Math.round(out.length*2/ids.length))}
+function loadMatch(i){if(!['ready','committed','ended'].includes(E.state)){LX.toast('Finish or abort the current match first');return}E.cur=i;E.state='ready';E.t=TOTAL;stopTick();save();render()}
+function nextMatch(){const i=E.matches.findIndex(m=>!m.done);E.cur=i<0?null:i;E.state='ready';E.t=TOTAL;save();render()}
+function startMatch(){if(E.cur===null){LX.toast('Load a match first');return}if(E.state==='ready'){E.t=TOTAL;E.state='auto'}else if(E.state==='paused'){E.state=E._resume}else return;startTick();render()}
+function pauseMatch(){if(E.state==='auto'||E.state==='teleop'){E._resume=E.state;E.state='paused';stopTick();render()}}
+function abortMatch(){if(!['auto','teleop','paused'].includes(E.state))return;stopTick();E.state='ready';E.t=TOTAL;const m=E.matches[E.cur];if(m){m.rs=newScore();m.bs=newScore()}LX.toast('Aborted. No score recorded.');render()}
+function endMatch(){if(!['auto','teleop','paused'].includes(E.state))return;stopTick();E.state='ended';E.t=0;render()}
+function commitMatch(){const m=E.matches[E.cur];if(!m||E.state!=='ended'){LX.toast('End the match before committing');return}m.done=true;E.state='committed';LX.toast('Match '+m.n+' committed: '+teamById(m.red).n+' '+total(m.rs)+' · '+teamById(m.blue).n+' '+total(m.bs));save();nextMatch();if(E.matches.every(x=>x.done)){LX.toast('All matches done. Results are ready.')}}
+function startTick(){stopTick();E.tick=setInterval(()=>{E.t-=1;if(E.state==='auto'&&E.t<=TOTAL-AUTO){E.state='teleop';LX.toast('Teleop!')}if(E.t<=0){endMatch();LX.toast('Match over. Check the scores, then Commit.')}renderClock()},E.fast?60:1000)}
+function stopTick(){clearInterval(E.tick);E.tick=null}
+function bump(side,k,d){const m=E.matches[E.cur];if(!m)return;const s=side==='red'?m.rs:m.bs;s[k]=Math.max(0,s[k]+d);save();renderScores()}
+function rankings(){const R={};E.teams.forEach(x=>R[x.id]={t:x,w:0,l:0,d:0,pts:0,pl:0});E.matches.filter(m=>m.done).forEach(m=>{const r=total(m.rs),b=total(m.bs);if(!R[m.red]||!R[m.blue])return;R[m.red].pl++;R[m.blue].pl++;R[m.red].pts+=r;R[m.blue].pts+=b;if(r>b){R[m.red].w++;R[m.blue].l++}else if(b>r){R[m.blue].w++;R[m.red].l++}else{R[m.red].d++;R[m.blue].d++}});return Object.values(R).sort((a,b)=>(b.w*2+b.d)-(a.w*2+a.d)||(b.pl?b.pts/b.pl:0)-(a.pl?a.pts/a.pl:0))}
+function resetEvent(){if(!confirm('Start a new event? Teams stay, matches and scores are cleared.'))return;E.matches=[];E.cur=null;E.state='ready';E.t=TOTAL;stopTick();save();render();step(1,steps()[0])}
+const fmt=x=>Math.floor(x/60)+':'+String(x%60).padStart(2,'0');
+const phaseLabel=()=>({ready:'Ready',auto:'Autonomous',teleop:'Teleop',paused:'Paused',ended:'Match over',committed:'Committed'})[E.state];
+const mlabel=()=>{const m=E.matches[E.cur];return m?`Match ${m.n} of ${E.matches.length} · ${teamById(m.red).n} vs ${teamById(m.blue).n}`:'No match loaded'};
+
+/* ---------- render ---------- */
+function allianceHtml(side){const m=E.matches[E.cur];const s=m?(side==='red'?m.rs:m.bs):newScore();const name=m?teamById(side==='red'?m.red:m.blue).n:'—';const live=['auto','teleop','ended','paused'].includes(E.state);return `<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.85">${side} alliance</span><b style="font-size:16px">${name}</b></div><div class="score" style="margin-top:8px">${TASKS.map(x=>`<div class="task"><span>${x.n} <span style="opacity:.7">(${x.p>0?'+':''}${x.p})</span></span><span class="ctl"><button ${live?'':'disabled'} onclick="bump('${side}','${x.k}',-1)">−</button><b>${s[x.k]}</b><button ${live?'':'disabled'} onclick="bump('${side}','${x.k}',1)">+</button></span></div>`).join('')}</div><div class="total">${total(s)}</div>`}
+function renderClock(){document.getElementById('timer').textContent=fmt(Math.max(0,E.t));document.getElementById('phase').textContent=phaseLabel();document.getElementById('p-timer').textContent=fmt(Math.max(0,E.t));document.getElementById('p-phase').textContent=phaseLabel();const c=document.getElementById('clock');c.className='card clock state-'+E.state;const m=E.matches[E.cur];if(m){document.getElementById('p-red').innerHTML=teamById(m.red).n+'<b>'+total(m.rs)+'</b>';document.getElementById('p-blue').innerHTML=teamById(m.blue).n+'<b>'+total(m.bs)+'</b>'}}
+function renderScores(){document.getElementById('red').innerHTML=allianceHtml('red');document.getElementById('blue').innerHTML=allianceHtml('blue');renderClock()}
+function render(){document.getElementById('teams').innerHTML=E.teams.map(x=>`<div class="teamrow"><span class="num">${x.id}</span><div><div class="nm">${x.n}</div><div class="mem">${x.m.join(' · ')} · ${x.r}</div></div><button class="x" title="Remove" onclick="removeTeam(${x.id})">✕</button></div>`).join('')||'<div class="muted" style="font-size:13px">No teams yet.</div>';
+ document.getElementById('sched').innerHTML=E.matches.length?`<table class="tbl"><tr><th>#</th><th>Red</th><th>Blue</th><th class="r">Score</th><th></th></tr>${E.matches.map((m,i)=>`<tr class="${i===E.cur?'now':''} ${m.done?'done':''}"><td class="mono">Q${m.n}</td><td>${teamById(m.red).n}</td><td>${teamById(m.blue).n}</td><td class="r">${m.done?total(m.rs)+' – '+total(m.bs):'—'}</td><td>${m.done?'<span class="pill green">done</span>':i===E.cur?'<span class="pill blue">on field</span>':`<button class="btn btn-ghost sm" onclick="loadMatch(${i})">load</button>`}</td></tr>`).join('')}</table>`:'<div class="muted" style="font-size:13px;padding:8px 0">No schedule yet. Press Generate.</div>';
+ const R=rankings();document.getElementById('rank').innerHTML=`<table class="tbl"><tr><th>#</th><th>Team</th><th class="r">W-L-T</th><th class="r">Avg</th></tr>${R.map((r,i)=>`<tr><td class="rank">${i+1}</td><td>${r.t.n}</td><td class="r">${r.w}-${r.l}-${r.d}</td><td class="r">${r.pl?(r.pts/r.pl).toFixed(1):'—'}</td></tr>`).join('')}</table>`;
+ const best=E.matches.filter(m=>m.done).flatMap(m=>[[m.red,total(m.rs)],[m.blue,total(m.bs)]]).sort((a,b)=>b[1]-a[1])[0];document.getElementById('awards').innerHTML=`<div class="award"><b>Champion</b>${R[0]&&R[0].pl?R[0].t.n:'—'}</div><div class="award"><b>Highest single match</b>${best&&teamById(best[0])?teamById(best[0]).n+' · '+best[1]:'—'}</div><div class="award"><b>Sportsmanship</b>Teacher's pick</div>`;
+ document.getElementById('mlabel').textContent=mlabel();document.getElementById('p-mlabel').textContent=mlabel();
+ const st=E.state;document.getElementById('btns').innerHTML=`<button class="btn btn-out sm" onclick="nextMatch()" ${E.matches.length?'':'disabled'}>Load next</button><button class="btn btn-navy sm" onclick="startMatch()" ${st==='ready'||st==='paused'?'':'disabled'}>${st==='paused'?'Resume':'Start'}</button><button class="btn btn-out sm" onclick="pauseMatch()" ${st==='auto'||st==='teleop'?'':'disabled'}>Pause</button><button class="btn btn-out sm" onclick="abortMatch()" ${['auto','teleop','paused'].includes(st)?'':'disabled'}>Abort</button><button class="btn btn-out sm" onclick="endMatch()" ${['auto','teleop','paused'].includes(st)?'':'disabled'}>End early</button><button class="btn btn-primary sm" onclick="commitMatch()" ${st==='ended'?'':'disabled'}>Commit score</button>`;
+ const sb=steps();sb[0].classList.toggle('done',E.teams.length>=2&&E.teams.every(x=>x.r!=='unassigned'));sb[1].classList.toggle('done',E.matches.length>0);sb[2].classList.toggle('done',E.matches.length>0&&E.matches.every(m=>m.done));sb[3].classList.toggle('done',E.matches.length>0&&E.matches.every(m=>m.done));
+ document.getElementById('importbtn').style.display=(S.roster||[]).length>=2?'':'none';
+ renderScores()}
+function step(n,b){steps().forEach(x=>x.classList.remove('on'));b.classList.add('on');[1,2,3,4].forEach(i=>document.getElementById('p'+i).classList.toggle('on',i===n));try{localStorage.setItem('lx.compete.step',String(n))}catch(e){}}
+document.addEventListener('keydown',e=>{if(!document.getElementById('p3').classList.contains('on'))return;if(e.target.tagName==='INPUT')return;if(e.code==='Space'){e.preventDefault();(E.state==='auto'||E.state==='teleop')?pauseMatch():startMatch()}if(e.key==='Enter')commitMatch();if(e.key==='Escape')abortMatch()});
+render();
+(function(){let n=1;try{n=+localStorage.getItem('lx.compete.step')||1}catch(e){}const q=+new URLSearchParams(location.search).get('step');if(q>=1&&q<=4)n=q;else if(E.matches.length&&E.matches.every(m=>m.done))n=4;step(n,steps()[n-1])})();
+</script>
+</body>
+</html>
