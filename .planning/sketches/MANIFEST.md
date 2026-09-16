@@ -24,3 +24,4 @@ Jacob then asked to remove printed login cards entirely and proposed that a stud
 | 001 | student-home | What does a student see first, and how much of the class shows on the home screen? | — | layout, student, launcher, robot-connect, join-class |
 | 002 | running-app | When XRPWeb runs inside the shell, where does the lesson live and how visible is the bridge? | — | layout, lesson, iframe, bridge, xrpweb, robot-lock |
 | 003 | teacher-class | How does a teacher run a class of pseudonymous tags and keep names off the server? | — | layout, teacher, roster, privacy, class-code, progress |
+| 004 | ribbon | What is the one bar every app inherits, and how does it behave inside a third-party app with its own navbar? | — | component, ribbon, shell, brand, i18n, robot-state |

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sketch 004 · The Ribbon</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#E9EBEE}
+#variant-nav{position:fixed;top:0;left:0;right:0;z-index:9998;background:#1C2230;color:#fff;padding:6px 16px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-family:system-ui,sans-serif;font-size:12px}
+#variant-nav .label{opacity:.6;margin-inline-end:8px}
+.variant-tab{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:5px 10px;cursor:pointer;font:inherit;transition:all .15s ease}
+.variant-tab:hover{background:rgba(255,255,255,.1)}
+.variant-tab.active{background:#fff;color:#1C2230;border-color:#fff}
+#stage{margin:var(--navh,48px) auto 0;max-width:1280px;min-height:calc(100vh - var(--navh,48px));transition:max-width .2s ease;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.variant{display:none;min-height:calc(100vh - var(--navh,48px));background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);font-size:var(--text-base);line-height:1.45;padding:var(--space-6) var(--space-8) var(--space-12)}
+.variant.active{display:block}
+#sketch-tools{position:fixed;bottom:12px;right:12px;z-index:9999;font-family:system-ui;font-size:12px;background:rgba(0,0,0,.75);color:#fff;padding:8px 12px;border-radius:8px;opacity:.4;transition:opacity .2s;display:flex;gap:8px;align-items:center}
+#sketch-tools:hover{opacity:1}
+#sketch-tools select,#sketch-tools button{font:inherit;font-size:12px;background:#333;color:#fff;border:1px solid #555;border-radius:4px;padding:3px 6px;cursor:pointer}
+#sketch-tools button.on{background:#fff;color:#000}
+#annot{position:fixed;z-index:10000;pointer-events:none;background:#111;color:#fff;font:11px/1.4 ui-monospace,monospace;padding:6px 8px;border-radius:4px;display:none;white-space:pre}
+.toast{position:fixed;left:50%;bottom:64px;transform:translateX(-50%) translateY(20px);background:#1C2230;color:#fff;padding:10px 16px;border-radius:8px;font:14px system-ui;opacity:0;transition:all .2s ease;z-index:9997;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+h1,h2,h3{font-family:var(--font-display);margin:0;line-height:1.15;font-weight:600}
+.muted{color:var(--color-text-muted)}
+.mono{font-family:var(--font-mono)}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--color-secondary)}
+.intro{display:grid;grid-template-columns:1.2fr 1fr;gap:var(--space-6);align-items:start;margin-bottom:var(--space-6)}
+.intro h1{font-size:var(--text-2xl);margin:4px 0 6px}
+.intro p{margin:0;max-width:60ch;color:var(--color-text-muted);font-size:14px}
+.controls{background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-sm);padding:var(--space-4);display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;font-size:12px}
+.controls label{display:flex;flex-direction:column;gap:4px;font-weight:600;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;font-size:10px}
+.controls select{font:inherit;font-family:var(--font-sans);font-size:13px;font-weight:500;color:var(--color-text);padding:7px 8px;border:1px solid var(--color-border);border-radius:8px;background:#fff;text-transform:none;letter-spacing:0}
+.rules{background:var(--color-secondary-soft);border-radius:var(--radius-md);padding:var(--space-4) var(--space-6);font-size:13px;margin-bottom:var(--space-6)}
+.rules b{font-weight:600}
+.rules ul{margin:6px 0 0;padding-inline-start:18px;columns:2;column-gap:32px}
+.rules li{margin-bottom:4px;break-inside:avoid}
+.ctx{margin-bottom:var(--space-6)}
+.ctx .lbl{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px;font-size:12px;color:var(--color-text-muted)}
+.ctx .lbl b{font-weight:600;color:var(--color-text);font-size:13px}
+.ctx .shot{border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-md);background:#fff}
+.ctx .shot.phone{width:375px;max-width:100%}
+.appbar{height:40px;background:#1e3a5c;display:flex;align-items:center;gap:16px;padding:0 12px;color:#9db4cc;font-size:12px;opacity:.85}
+.appbar .lg{color:#cfd8e3;font-weight:700}
+.appbar .cx{margin-inline-start:auto;background:#d6d6d6;color:#1e3a5c;font-weight:700;font-size:10px;padding:5px 12px;border-radius:12px 0 0 12px;margin-inline-end:-12px}
+.appbody{height:70px;background:repeating-linear-gradient(135deg,#f3f4f6 0 8px,#e9ebef 8px 16px);display:grid;place-items:center;font-size:12px;color:var(--color-text-muted)}
+.pagebody{height:70px;background:var(--color-bg);display:grid;place-items:center;font-size:12px;color:var(--color-text-muted)}
+.anat{position:relative;margin-bottom:8px}
+.anat .num{position:absolute;top:-10px;width:20px;height:20px;border-radius:50%;background:var(--color-primary);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;box-shadow:0 0 0 2px #fff;z-index:3}
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px 24px;font-size:13px;margin:12px 0 var(--space-6)}
+.parts div{display:flex;gap:10px}
+.parts b{width:20px;height:20px;border-radius:50%;background:var(--color-primary);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;flex:none}
+.parts span b{display:inline;width:auto;height:auto;background:none;color:var(--color-text);font-weight:600;font-size:13px}
+
+/* ================= THE RIBBON ================= */
+.rb{--bar:#22527B;--acc:#0A6EFF;--pri:#D1182C;position:relative;overflow:hidden;background:var(--bar);color:#fff;display:flex;align-items:center;gap:8px;padding-inline:20px 88px;font-family:var(--font-sans);font-size:14px;z-index:2}
+.rb.h48{height:48px}.rb.h56{height:56px}.rb.h28{height:28px;font-size:12px;padding-inline:12px 60px;gap:6px}
+.rb.motif::before{content:"";position:absolute;inset-inline-end:-70px;top:-30px;width:150px;height:140px;background:linear-gradient(115deg,transparent 45%,var(--pri) 45% 58%,transparent 58% 62%,var(--acc) 62% 75%,transparent 75%);opacity:.55;pointer-events:none}
+.rb[dir=rtl].motif::before{transform:scaleX(-1)}
+.rb > *{position:relative;flex:none}
+.rb .brand{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:-.01em;margin-inline-end:10px}
+.rb .brand svg{width:22px;height:22px}
+.rb.h28 .brand svg{width:16px;height:16px}
+.rb .brand .nm{white-space:nowrap}
+.rb .crumb{font-size:13px;opacity:.9;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1 1 auto;min-width:0}
+.rb .crumb b{font-weight:600}
+.rb .sp{flex:1 1 auto}
+.rb .pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.14);white-space:nowrap}
+.rb .pill i{width:8px;height:8px;border-radius:50%;background:#fff;display:inline-block;flex:none}
+.rb .pill.ok{background:#DCF5E6;color:#1E7A45}.rb .pill.ok i{background:#1E9E5A}
+.rb .pill.warn{background:#FFF1D6;color:#8A5A00}.rb .pill.warn i{background:#E5A000}
+.rb .pill.bad{background:#FDE4E7;color:#B21425}.rb .pill.bad i{background:#D1182C}
+.rb .pill.q i{animation:blink 1s ease infinite}
+@keyframes blink{50%{opacity:.2}}
+@media (prefers-reduced-motion:reduce){.rb .pill.q i{animation:none}}
+.rb .sync{width:10px;height:10px;border-radius:50%;background:#1E9E5A;display:inline-block;box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+.rb .sync.local{background:#9CA3AF}.rb .sync.off{background:#E5A000}
+.rb .me{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;background:rgba(255,255,255,.14);border-radius:999px;padding:4px 12px 4px 4px;white-space:nowrap}
+.rb .me .av{width:26px;height:26px;border-radius:50%;background:var(--acc);border:2px solid #fff;display:grid;place-items:center;font-size:10px;font-weight:800}
+.rb.h28 .me{padding:2px 8px 2px 2px;font-size:11px}.rb.h28 .me .av{width:18px;height:18px;font-size:8px;border-width:1.5px}
+.rb .btn{font:600 12px var(--font-sans);color:#fff;background:transparent;border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:5px 12px;cursor:pointer;white-space:nowrap}
+.rb .btn.pri{background:var(--pri);border-color:var(--pri)}
+.rb .step{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--bar);border-radius:999px;padding:4px 12px 4px 6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.rb .step .ring{width:20px;height:20px;border-radius:50%;background:conic-gradient(var(--pri) var(--p,43%),#E9EEF5 0);display:grid;place-items:center}
+.rb .step .ring::after{content:"";width:12px;height:12px;border-radius:50%;background:#fff}
+.rb .chev{opacity:.7;font-size:11px;cursor:pointer}
+/* tier 2 (variant B) */
+.tier2{height:36px;background:#fff;border-bottom:1px solid var(--color-border);display:flex;align-items:center;gap:14px;padding-inline:20px;font-size:12px;color:var(--color-text-muted);position:relative;z-index:1}
+.tier2 .app{font-weight:600;color:var(--color-text);display:inline-flex;align-items:center;gap:6px}
+.tier2 .app i{width:6px;height:6px;border-radius:50%;background:#1E9E5A;display:inline-block}
+.tier2 .prog{display:inline-flex;align-items:center;gap:8px}
+.tier2 .prog .bar{width:110px;height:6px;border-radius:3px;background:var(--color-surface-2);overflow:hidden}
+.tier2 .prog .bar i{display:block;height:100%;background:var(--color-primary);width:43%}
+.tier2 .sp{flex:1}
+.tier2 .b{font:600 12px var(--font-sans);border:1px solid var(--color-border);background:#fff;border-radius:999px;padding:4px 10px;cursor:pointer;color:var(--color-text)}
+.tier2 .b.pri{background:var(--color-primary);border-color:var(--color-primary);color:#fff}
+.tier2 .mono{font-family:var(--font-mono);font-size:11px}
+@media (max-width:900px){.intro{grid-template-columns:1fr}.rules ul{columns:1}}
+</style>
+</head>
+<body>
+
+<div id="variant-nav">
+  <span class="label">Sketch 004 · The ribbon</span>
+  <button class="variant-tab active" onclick="showVariant('a',event)">A: Slim and constant</button>
+  <button class="variant-tab" onclick="showVariant('b',event)">B: Two tiers</button>
+  <button class="variant-tab" onclick="showVariant('c',event)">C: Collapses in apps</button>
+</div>
+
+<div id="stage">
+
+<div id="variant-a" class="variant theme-experiential-play active" data-rv="a"></div>
+<div id="variant-b" class="variant theme-experiential-play" data-rv="b"></div>
+<div id="variant-c" class="variant theme-experiential-play" data-rv="c"></div>
+
+</div>
+
+<div id="sketch-tools">
+  <button onclick="vp(768,this)">tablet</button><button class="on" onclick="vp(1280,this)">desktop</button>
+  <span>·</span>
+  <button id="annot-btn" onclick="toggleAnnot(this)">annotate</button>
+</div>
+<div id="annot"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+function fitNav(){const h=document.getElementById("variant-nav").offsetHeight;document.documentElement.style.setProperty("--navh",h+"px")}window.addEventListener("resize",fitNav);window.addEventListener("load",fitNav);fitNav();
+function showVariant(id,ev){document.querySelectorAll('.variant').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.variant-tab').forEach(t=>t.classList.remove('active'));document.getElementById('variant-'+id).classList.add('active');ev.target.classList.add('active')}
+function vp(w,btn){document.getElementById('stage').style.maxWidth=w+'px';document.querySelectorAll('#sketch-tools button').forEach(b=>{if(b.id!=='annot-btn')b.classList.remove('on')});btn.classList.add('on')}
+let annotOn=false;const annot=document.getElementById('annot');
+function toggleAnnot(b){annotOn=!annotOn;b.classList.toggle('on',annotOn);annot.style.display='none'}
+document.addEventListener('mousemove',e=>{if(!annotOn)return;const el=e.target.closest('#stage *');if(!el){annot.style.display='none';return}const cs=getComputedStyle(el);annot.textContent=el.tagName.toLowerCase()+(typeof el.className==='string'&&el.className?'.'+el.className.split(' ')[0]:'')+'\nh '+cs.height+'\nfont '+cs.fontSize+' '+cs.fontWeight+'\ncolor '+cs.color+'\nbg '+cs.backgroundColor;annot.style.display='block';annot.style.left=(e.clientX+14)+'px';annot.style.top=(e.clientY+14)+'px'})
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2000)}
+
+/* ---------- brand configs: what a deploy can change (and nothing else) ---------- */
+const XMARK=(c1,c2)=>`<svg viewBox="0 0 40 40"><path d="M38 4h-9L2 36h9z" fill="${c2}"/><path d="M2 4h9l27 32h-9z" fill="${c1}"/></svg>`;
+const BRANDS={
+ experiential:{name:'LearnXRP',bar:'#22527B',acc:'#0A6EFF',pri:'#D1182C',motif:true,mark:XMARK('#D1182C','#0A6EFF')},
+ educabot:{name:'Educabot XRP',bar:'#1B6B5A',acc:'#2EC4B6',pri:'#F59E0B',motif:false,mark:`<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#2EC4B6"/><path d="M12 20h16M20 12v16" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>`},
+ firstglobal:{name:'FIRST Global XRP',bar:'#003C71',acc:'#F58220',pri:'#F58220',motif:true,mark:`<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="#F58220" stroke-width="4"/><path d="M3 20h34M20 3c6 6 6 28 0 34M20 3c-6 6-6 28 0 34" stroke="#F58220" stroke-width="2.5" fill="none"/></svg>`}
+};
+/* ---------- strings: the ribbon is shell-owned, so it is translated once ---------- */
+const T={
+ en:{home:'Home',step:'Step',of:'of',robotNone:'no robot',robotQ:'searching…',robotOk:'XRP-3F2A',robotLow:'XRP-3F2A · 12%',robotLost:'robot lost',sim:'simulator',hint:'Hint',next:'Next',students:'students in',end:'End class',room:'room open',camp:'Camp session',days:'ends in 9 days',local:'saved on this device',synced:'synced',off:'offline · will sync',lesson:'Line follower',s3:'Read the reflectance sensor',teacher:'Ms. Rivera',drive:'Drive'},
+ es:{home:'Inicio',step:'Paso',of:'de',robotNone:'sin robot',robotQ:'buscando…',robotOk:'XRP-3F2A',robotLow:'XRP-3F2A · 12%',robotLost:'robot perdido',sim:'simulador',hint:'Pista',next:'Siguiente',students:'alumnos',end:'Terminar clase',room:'sala abierta',camp:'Campamento',days:'termina en 9 días',local:'guardado en este equipo',synced:'sincronizado',off:'sin conexión · se sincronizará',lesson:'Seguidor de línea',s3:'Lee el sensor de reflectancia',teacher:'Sra. Rivera',drive:'Conducir'},
+ ar:{home:'الرئيسية',step:'الخطوة',of:'من',robotNone:'لا يوجد روبوت',robotQ:'جارٍ البحث…',robotOk:'XRP-3F2A',robotLow:'XRP-3F2A · 12%',robotLost:'انقطع الروبوت',sim:'المحاكي',hint:'تلميح',next:'التالي',students:'طلاب',end:'إنهاء الحصة',room:'الغرفة مفتوحة',camp:'جلسة المخيم',days:'تنتهي خلال 9 أيام',local:'محفوظ على هذا الجهاز',synced:'متزامن',off:'دون اتصال · سيتم المزامنة',lesson:'متتبع الخط',s3:'اقرأ حساس الانعكاس',teacher:'الأستاذة ريفيرا',drive:'قيادة'}
+};
+const STATE={robot:'ok',sync:'synced',brand:'experiential',lang:'en'};
+const CTX=[
+ {id:'home',title:'Student home',note:'No app running. The ribbon is the only chrome.',role:'student',app:null,phone:false},
+ {id:'xrpcode',title:'Inside XRPCode (WPI), lesson step 3 of 7',note:'The app draws its own navbar underneath. The ribbon must earn its height.',role:'student',app:'XRPCode',lesson:true,phone:false},
+ {id:'sim',title:'Inside the Educabot simulator, same lesson',note:'No robot needed: the robot chip changes meaning, it does not disappear.',role:'student',app:'Simulator',lesson:true,sim:true,phone:false},
+ {id:'teacher',title:'Teacher hosting the room',note:'Same ribbon, different right side: students in, End class. No robot chip.',role:'teacher',app:null,phone:false},
+ {id:'camp',title:'Camp session, no wifi',note:'Sync dot goes amber and says so. Nothing else changes.',role:'student',app:'XRPCode',lesson:true,camp:true,phone:false},
+ {id:'phone',title:'Drive on a phone (375px)',note:'Brand mark only, crumb dropped, robot and identity kept.',role:'student',app:'Drive',phone:true}
+];
+function robotPill(t,ctx){if(ctx.sim)return `<span class="pill"><i></i>${t.sim}</span>`;const s=STATE.robot;if(s==='none')return `<span class="pill"><i style="opacity:.4"></i>${t.robotNone}</span>`;if(s==='q')return `<span class="pill warn q"><i></i>${t.robotQ}</span>`;if(s==='ok')return `<span class="pill ok"><i></i>${t.robotOk}</span>`;if(s==='low')return `<span class="pill warn"><i></i>${t.robotLow}</span>`;return `<span class="pill bad"><i></i>${t.robotLost}</span>`}
+function syncDot(t,ctx){const s=ctx.camp?'off':STATE.sync;const cls=s==='local'?'local':s==='off'?'off':'';const lbl=s==='local'?t.local:s==='off'?t.off:t.synced;return `<span class="sync ${cls}" title="${lbl}" onclick="toast('${lbl}')"></span>`}
+function me(ctx,t){return ctx.role==='teacher'?`<span class="me"><span class="av">MR</span>${t.teacher}</span>`:`<span class="me"><span class="av">OT</span>Otter-42</span>`}
+function crumb(ctx,t){if(ctx.role==='teacher')return `<span class="crumb">Period 3 Robotics · <b>${t.room}</b></span>`;if(ctx.camp)return `<span class="crumb">${t.camp} · ${t.days} · <b>${t.lesson}</b></span>`;if(ctx.app==='Drive')return `<span class="crumb"><b>${t.drive}</b></span>`;if(ctx.app)return `<span class="crumb">Period 3 / Unit 2 / <b>${t.lesson}</b></span>`;return `<span class="crumb"><b>${t.home}</b></span>`}
+function brandEl(b,ctx,mini){return `<span class="brand">${b.mark}${(ctx.phone||mini)?'':`<span class="nm">${b.name}</span>`}</span>`}
+function stepPill(t,expandable){return `<span class="step" onclick="toast('Opens the lesson drawer over the app')"><span class="ring" style="--p:43%"></span>${t.step} 3 ${t.of} 7${expandable?' ▾':''}</span>`}
+function ribbonA(ctx,b,t,dir){return `<div class="rb h48 ${b.motif?'motif':''}" dir="${dir}" style="--bar:${b.bar};--acc:${b.acc};--pri:${b.pri}">${brandEl(b,ctx)}${ctx.phone?'':crumb(ctx,t)}<span class="sp"></span>${ctx.role==='teacher'?`<span class="pill ok"><i></i>9 ${t.students}</span><button class="btn">${t.end}</button>`:robotPill(t,ctx)}${syncDot(t,ctx)}${me(ctx,t)}</div>`}
+function ribbonB(ctx,b,t,dir){const top=`<div class="rb h56 ${b.motif?'motif':''}" dir="${dir}" style="--bar:${b.bar};--acc:${b.acc};--pri:${b.pri}">${brandEl(b,ctx)}${ctx.phone?'':crumb(ctx,t)}<span class="sp"></span>${ctx.role==='teacher'?`<span class="pill ok"><i></i>9 ${t.students}</span><button class="btn">${t.end}</button>`:robotPill(t,ctx)}${syncDot(t,ctx)}${me(ctx,t)}</div>`;if(!ctx.app||ctx.phone)return top;return top+`<div class="tier2" dir="${dir}"><span class="app"><i></i>${ctx.app}${ctx.app==='XRPCode'?' · WPI':ctx.app==='Simulator'?' · Educabot':''}</span>${ctx.lesson?`<span class="prog"><span>${t.step} 3 ${t.of} 7 · ${t.s3}</span><span class="bar"><i></i></span></span>`:''}<span class="mono">bridge v1 · saved 2s</span><span class="sp"></span>${ctx.lesson?`<button class="b" onclick="toast('Hint appears in a drawer')">${t.hint}</button><button class="b pri" onclick="toast('Next step sent to the app')">${t.next}</button>`:''}</div>`}
+function ribbonC(ctx,b,t,dir,expanded){if(ctx.app&&!expanded){return `<div class="rb h28 ${b.motif?'motif':''}" dir="${dir}" style="--bar:${b.bar};--acc:${b.acc};--pri:${b.pri}">${brandEl(b,ctx,true)}${ctx.lesson?stepPill(t,true):`<span class="crumb"><b>${ctx.app}</b></span>`}<span class="sp"></span>${robotPill(t,ctx)}${syncDot(t,ctx)}${me(ctx,t)}<span class="chev" onclick="expandC(this)" title="Expand">⌄</span></div>`}return `<div class="rb h56 ${b.motif?'motif':''}" dir="${dir}" style="--bar:${b.bar};--acc:${b.acc};--pri:${b.pri}">${brandEl(b,ctx)}${ctx.phone?'':crumb(ctx,t)}${ctx.lesson?stepPill(t,false):''}<span class="sp"></span>${ctx.role==='teacher'?`<span class="pill ok"><i></i>9 ${t.students}</span><button class="btn">${t.end}</button>`:robotPill(t,ctx)}${syncDot(t,ctx)}${me(ctx,t)}${ctx.app?`<span class="chev" onclick="expandC(this)" title="Collapse">⌃</span>`:''}</div>`}
+const EXP={};
+function expandC(el){const shot=el.closest('.shot');const k=shot.dataset.k;EXP[k]=!EXP[k];render()}
+function appStub(ctx){if(!ctx.app)return `<div class="pagebody">page content · the shell owns this too</div>`;if(ctx.app==='XRPCode')return `<div class="appbar"><span class="lg">XRPCode</span><span>File ▾</span><span>View ▾</span><span>Help ▾</span><span class="cx">CONNECT XRP</span></div><div class="appbody">app frame · the app owns everything below the ribbon</div>`;if(ctx.app==='Simulator')return `<div class="appbar" style="background:#0f172a;color:#cbd5e1"><span class="lg">Educabot Simulator</span></div><div class="appbody">app frame</div>`;return `<div class="appbody" style="height:110px">Drive · joystick and gamepad · app frame</div>`}
+const CONTROLS=`<div class="controls"><label>Robot<select onchange="STATE.robot=this.value;render()"><option value="none">not connected</option><option value="q">searching</option><option value="ok" selected>connected</option><option value="low">low battery</option><option value="lost">lost mid-run</option></select></label><label>Sync<select onchange="STATE.sync=this.value;render()"><option value="local">local only (no class)</option><option value="synced" selected>synced to class</option><option value="off">offline, queued</option></select></label><label>Brand config<select onchange="STATE.brand=this.value;render()"><option value="experiential">Experiential (default)</option><option value="educabot">Educabot (example)</option><option value="firstglobal">FIRST Global (example)</option></select></label><label>Language<select onchange="STATE.lang=this.value;render()"><option value="en">English</option><option value="es">Español</option><option value="ar">العربية (RTL)</option></select></label></div>`;
+const RULES=`<div class="rules"><b>What the ribbon promises every app</b><ul><li>One bar, shell-owned, above every app. Apps never draw over it and cannot hide it.</li><li>Its height is a token the app receives over the bridge, so app layouts can reserve it.</li><li>Left side is identity of place: brand mark, then where you are. Right side is identity of state: robot, sync, who you are.</li><li>The robot chip reflects the lock owner from the bridge. Green means this app holds the robot.</li><li>A deploy may change brand name, mark, three colors and the motif. Nothing else.</li><li>Translated once, in the shell, and it mirrors for RTL. Apps translate themselves.</li></ul></div>`;
+function anatomy(v,b,t){const ctx=CTX[1];const dir='ltr';let html=v==='a'?ribbonA(ctx,b,t,dir):v==='b'?ribbonB(ctx,b,t,dir):ribbonC(ctx,b,t,dir,true);const nums=v==='b'?[['4%','1'],['20%','2'],['66%','3'],['77%','4'],['88%','5'],['2%','6','36px']]:[['4%','1'],['20%','2'],['66%','3'],['77%','4'],['88%','5']];const parts={a:[['1','Brand mark and name','from brand config; mark only on phone'],['2','Crumb','set by the shell from lesson context, never by the app'],['3','Robot chip','lock owner and state: none, searching, connected, low, lost'],['4','Sync dot','local, synced, offline-queued; click for words'],['5','Identity pill','tag for students, name for adults']],b:[['1','Brand mark and name','same as A'],['2','Crumb','same as A'],['3','Robot chip','same as A'],['4','Sync dot','same as A'],['5','Identity pill','same as A'],['6','Context tier','appears only inside an app: app and provider, step progress, bridge state, Hint and Next']],c:[['1','Brand mark and name','collapses to the mark alone'],['2','Crumb + step pill','the step pill survives the collapse and opens the lesson drawer'],['3','Robot chip','same as A'],['4','Sync dot','same as A'],['5','Identity pill','shrinks to initials when collapsed'],['6','Collapse toggle','⌃ collapses to 28px inside apps; auto-collapses on Run']]}[v];return `<div class="eyebrow" style="margin-bottom:8px">Anatomy</div><div class="anat shot">${html}${nums.map(n=>`<span class="num" style="inset-inline-start:${n[0]};${n[2]?'top:'+n[2]:''}">${n[1]}</span>`).join('')}</div><div class="parts">${parts.map(p=>`<div><b>${p[0]}</b><span><b>${p[1]}</b> · ${p[2]}</span></div>`).join('')}</div>`}
+function render(){const b=BRANDS[STATE.brand],t=T[STATE.lang],dir=STATE.lang==='ar'?'rtl':'ltr';['a','b','c'].forEach(v=>{const root=document.querySelector(`[data-rv="${v}"]`);const intro={a:['Slim and constant','48px, identical everywhere. The lesson lives in the page or in a drawer, never in the bar. Cheapest to build, least to argue about, and inside XRPCode it stacks on a second navbar.'],b:['Two tiers','A 56px ribbon plus a 36px context tier that exists only inside an app: which app, which provider, step progress, bridge state, Hint and Next. Most informative, most height.'],c:['Collapses in apps','56px on shell pages, 28px inside an app: mark, step pill, robot, sync, initials. Expands on hover or the chevron, and auto-collapses when a program runs. Most app space, one more state to learn.']}[v];root.innerHTML=`<div class="intro"><div><span class="eyebrow">Variant ${v.toUpperCase()}</span><h1>${intro[0]}</h1><p>${intro[1]}</p></div>${CONTROLS}</div>${anatomy(v,b,t)}${RULES}<div class="eyebrow" style="margin-bottom:10px">The same ribbon in six places</div>`+CTX.map(ctx=>{const k=v+ctx.id;const rb=v==='a'?ribbonA(ctx,b,t,dir):v==='b'?ribbonB(ctx,b,t,dir):ribbonC(ctx,b,t,dir,!!EXP[k]);return `<div class="ctx"><div class="lbl"><b>${ctx.title}</b><span>${ctx.note}</span></div><div class="shot ${ctx.phone?'phone':''}" data-k="${k}">${rb}${appStub(ctx)}</div></div>`}).join('')})}
+render();
+</script>
+</body>
+</html>
