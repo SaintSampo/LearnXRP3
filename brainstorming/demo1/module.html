@@ -8,7 +8,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/theme.css">
 <style>
-body{height:100vh;overflow:hidden;zoom:1}
+body{height:100vh;overflow:hidden;zoom:1;--menu-zoom:1}
+.lx-menu{zoom:var(--ui-zoom);max-height:calc((100vh - 24px) / var(--ui-zoom) - var(--ribbon-h) - 8px)}
 #ribbon{zoom:var(--ui-zoom)}
 .coach{zoom:var(--ui-zoom)}
 .mid{flex:1;display:grid;grid-template-columns:calc(350px * var(--ui-zoom)) 1fr;min-height:0;gap:calc(16px * var(--ui-zoom));padding:calc(16px * var(--ui-zoom));height:calc(100vh - var(--ribbon-h) * var(--ui-zoom))}
@@ -98,7 +99,6 @@ function renderCoach(){const s=L.steps[step-1];const isDone=done.has(step);
  <div class="tile head">${LX.ringSvg(done.size,7)}<div><span class="eyebrow">${LX.XMARK('#D1182C','#0A6EFF')} ${L.title}</span><div style="font-weight:600">${L.unit} · ${app.name}</div><div class="muted" style="font-size:12px">${S.classCode?t('dueFri')+' · '+S.teacher:t('syncLocal')}</div></div></div>
  ${stepHtml}
  <div class="tile" style="padding:12px 16px"><ul class="steplist">${L.steps.map((x,i)=>`<li class="${done.has(i+1)?'done':''} ${i+1===step?'now':''}" onclick="goStep(${i+1})"><i>${done.has(i+1)?'✓':i+1}</i>${x.t}</li>`).join('')}</ul></div>
- ${app.id!=='sim'&&app.id!=='docs'?`<div class="tile" style="padding:10px 14px;font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:8px"><span>${t('noRobotToday')}</span><a class="btn btn-out sm" href="module.html?module=sim">${t('useSim')}</a></div>`:''}
  <div class="bridge"><span><i class="dot"></i>${app.id==='xrpcode'||app.id==='python'?'wpi.xrpweb':app.id}</span><span><b>${t('robot')}</b> ${lockLabel()}</span><span><b>${t('saved')}</b> ${S.sync==='local'?'local':'2s'}</span><span><b>${t('progress')}</b> ${isDone?t('done',{s:step}):t('pending',{s:step})}</span></div>`}
 function renderFrame(){const f=document.getElementById('frame');if(app.url){f.innerHTML=`<iframe src="${app.url}" allow="${app.allow}" title="${app.name}" referrerpolicy="no-referrer-when-downgrade"></iframe><span class="frame-tag">iframe · ${new URL(app.url).host}${app.allow?' · allow='+app.allow.replace(/;\s*/g,' '):''}</span>`}else{f.innerHTML=`<div class="ph"><div><div class="thumb">${LX.THUMBS[app.thumb]}</div><div style="font-weight:600;font-size:18px">${app.name} · ${app.provider}</div><div class="muted" style="font-size:14px;margin-top:6px">${t('placeholder',{a:app.name})}</div></div></div><span class="frame-tag">iframe · (no public build yet)</span>`}}
 function toggleHint(b){const h=document.getElementById('hint');h.classList.toggle('open');b.textContent=h.classList.contains('open')?t('hideHint'):t('hint')}

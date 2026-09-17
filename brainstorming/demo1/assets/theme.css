@@ -18,7 +18,7 @@
 @media (min-width:1900px){:root{--ui-zoom:1.25}}
 @media (min-width:2300px){:root{--ui-zoom:1.4}}
 @media (min-width:3000px){:root{--ui-zoom:1.7}}
-body{zoom:var(--ui-zoom)}
+body{zoom:var(--ui-zoom);--menu-zoom:var(--ui-zoom)}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
 body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);font-size:15px;line-height:1.45;display:flex;flex-direction:column;min-height:100vh}
@@ -100,7 +100,7 @@ a{color:var(--color-secondary)}
 .rb .gear:hover{background:rgba(255,255,255,.26)}
 .rb .gear svg{width:18px;height:18px}
 /* settings menu */
-.lx-menu{position:fixed;top:calc(var(--ribbon-h) + 8px);inset-inline-end:12px;width:320px;max-height:calc(100vh - var(--ribbon-h) - 24px);overflow:auto;background:#fff;color:var(--color-text);border-radius:var(--radius-md);box-shadow:var(--shadow-lg);padding:16px;z-index:200;font-size:13px;display:none}
+.lx-menu{position:fixed;top:calc(var(--ribbon-h) + 8px);inset-inline-end:12px;width:320px;max-height:calc((100vh - 24px) / var(--menu-zoom,1) - var(--ribbon-h) - 8px);overflow:auto;overscroll-behavior:contain;background:#fff;color:var(--color-text);border-radius:var(--radius-md);box-shadow:var(--shadow-lg);padding:16px;z-index:200;font-size:13px;display:none}
 .lx-menu.open{display:block}
 .lx-menu h4{margin:0 0 4px;font-size:14px}
 .lx-menu .sub{font-size:11px;color:var(--color-text-muted);margin-bottom:12px}
